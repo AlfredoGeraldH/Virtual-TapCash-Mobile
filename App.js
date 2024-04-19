@@ -12,17 +12,17 @@ import HomeScreen from "./Component/HomeScreen";
 const data = [
   {
     id: 1,
-    image: require("./assets/Icon/ic_wallet.png"),
+    image: require("./assets/icon/ic_wallet.png"),
     name: "E-Wallet",
   },
   {
     id: 2,
-    image: require("./assets/Icon/ic_qris.png"),
+    image: require("./assets/icon/ic_qris.png"),
     name: "Qris",
   },
   {
     id: 3,
-    image: require("./assets/Icon/ic_more.png"),
+    image: require("./assets/icon/ic_more.png"),
     name: "Lainnya",
   },
 ];
