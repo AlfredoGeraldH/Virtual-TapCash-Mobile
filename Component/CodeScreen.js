@@ -22,6 +22,7 @@ const CodeScreen = () => {
         style={{
           width: "100%",
           paddingHorizontal: 16,
+          marginTop: 0,
         }}
       >
         <Text style={{ fontSize: 16, fontWeight: "500" }}>My TapCash 1</Text>
@@ -40,7 +41,7 @@ const CodeScreen = () => {
         </Text>
         <Image source={require("../assets/qr.png")} />
       </View>
-
+      <View style={{ flex: 1 }} />
       <View
         style={{
           width: "100%",
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F5FEFF",
     alignItems: "center",
+
     width: "100%",
     marginTop: 50,
     gap: 16,

@@ -11,6 +11,8 @@ import HomeScreen from "./Component/HomeScreen";
 import CodeScreen from "./Component/CodeScreen";
 import SplashScreen from "./Component/SplashScreen";
 import LoginScreen from "./Component/LoginScreen";
+import TopUp from "./Component/TopUp";
+import KonfirmasiPembayaran from "./Component/KonfirmasiPembayaran";
 
 const App = () => {
   return (
@@ -18,7 +20,9 @@ const App = () => {
       {/* <HomeScreen /> */}
       {/* <CodeScreen /> */}
       {/* <SplashScreen /> */}
-      <LoginScreen />
+      {/* <LoginScreen /> */}
+      {/* <TopUp /> */}
+      <KonfirmasiPembayaran />
     </View>
   );
 };
