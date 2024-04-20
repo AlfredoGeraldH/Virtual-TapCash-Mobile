@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, Image } from "react-native";
 import FilledButton from "../Component/FilledButton";
 
 const LoginPopUp = () => {

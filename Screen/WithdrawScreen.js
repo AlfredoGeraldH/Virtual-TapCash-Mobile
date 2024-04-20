@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { StyleSheet, View, Text, Image, TextInput } from "react-native";
 import FilledButton from "../Component/FilledButton";
 import TopBar from "../Component/topbar";
 

@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import FilledButton from "../Component/FilledButton";
 import Tapcash from "../Component/TapCash";
 import LightButton from "../Component/LightButton";
 

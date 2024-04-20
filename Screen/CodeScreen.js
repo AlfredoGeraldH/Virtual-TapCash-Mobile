@@ -4,8 +4,6 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity,
-  FlatList,
 } from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
