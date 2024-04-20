@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
+import TopBar from "../Component/topbar";
+import Tapcash from "../Component/TapCash";
 
 const transaksi = [
   {
@@ -43,10 +45,10 @@ const renderItem = ({ item }) => {
         }}
       >
         <Text style={{ fontSize: 14, color: "#232323" }}>{item.name}</Text>
-        <Text style={{ fontSize: 16, color: "#005E68" }}>{item.price}</Text>
+        <Text style={{ fontSize: 16, color: "#005E68" }}>Rp{item.price}</Text>
       </View>
       <Text style={{ fontSize: 12, fontWeight: "300", color: "#4E4B4B" }}>
-        Rp{item.date}
+        {item.date}
       </Text>
     </View>
   );
@@ -56,11 +58,7 @@ const HomeScreen = () => {
   const onPress = console.log("tekan");
   return (
     <View style={styles.container}>
-      <View style={styles.topbar}>
-        <Image source={require("../assets/icon/ic_arrow_left.png")} />
-        <Text style={{ fontSize: 16 }}>Virtual TapCash</Text>
-        <Image source={require("../assets/icon/ic_information.png")} />
-      </View>
+      <TopBar />
       <View
         style={{
           justifyContent: "space-between",
@@ -85,43 +83,8 @@ const HomeScreen = () => {
           Ganti Kartu
         </Text>
       </View>
-      <View style={styles.card}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <Image source={require("../assets/logo/logo_tapcash.png")} />
-          <Image source={require("../assets/logo/logo_bni_white.png")} />
-        </View>
-        <Text
-          style={{
-            fontSize: 10,
-            color: "#FFF",
-            letterSpacing: 1,
-          }}
-        >
-          CARD NUMBER
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            letterSpacing: 0.5,
-            color: "#FFF",
-          }}
-        >
-          1234 5678 9101
-        </Text>
-        <View>
-          <Text style={{ fontSize: 12, color: "#FFF", letterSpacing: 1 }}>
-            SALDO
-          </Text>
-          <View style={{ color: "#FFF", flexDirection: "row", gap: 8 }}>
-            <Text style={{ fontSize: 16, color: "#FFF" }}>Rp240.000</Text>
-            <Image source={require("../assets/icon/ic_update.png")} />
-          </View>
-        </View>
+      <View style={{ width: "75%" }}>
+        <Tapcash />
       </View>
       <View
         style={{
@@ -192,34 +155,9 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F9FA",
     alignItems: "center",
     width: "100%",
-    marginTop: 50,
     gap: 16,
-  },
-
-  topbar: {
-    flexDirection: "row",
-    width: "100%",
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    backgroundColor: "#FCFCFC",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#F0F1F5",
-  },
-
-  card: {
-    width: "75%",
-    height: 150,
-    borderRadius: 12,
-    backgroundColor: "#EF5A22",
-    padding: 15,
-    gap: 8,
-    shadowColor: "black",
-    elevation: 5,
   },
 
   lightbutton: {

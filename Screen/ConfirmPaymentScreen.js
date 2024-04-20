@@ -1,14 +1,12 @@
 import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import TopBar from "../Component/topbar";
+import FilledButton from "../Component/FilledButton";
 
 const KonfirmasiPembayaran = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.topbar}>
-        <Image source={require("../assets/icon/ic_arrow_left.png")} />
-        <Text style={{ fontSize: 16, fontWeight: "400" }}>Konfirmasi</Text>
-        <Image source={require("../assets/icon/ic_information.png")} />
-      </View>
+      <TopBar />
 
       <View style={styles.card}>
         <View
@@ -96,13 +94,7 @@ const KonfirmasiPembayaran = () => {
       <View style={{ flex: 1 }} />
 
       <View style={styles.bottombar}>
-        <TouchableOpacity style={{ width: "100%", alignSelf: "" }}>
-          <View style={styles.bottombutton}>
-            <Text style={{ fontSize: 16, fontWeight: "400", color: "#FFF" }}>
-              Selanjutnya
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <FilledButton />
       </View>
     </View>
   );
@@ -111,10 +103,8 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flex: 1,
-    backgroundColor: "#F5F9FA",
     alignItems: "center",
     width: "100%",
-    marginTop: 50,
     gap: 16,
   },
 
@@ -138,28 +128,11 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
 
-  bottombutton: {
-    backgroundColor: "#EF5A22",
-    borderRadius: 8,
-    paddingHorizontal: 18,
-    paddingVertical: 9,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "black",
-    elevation: 2,
-    width: "100%",
-  },
-
   bottombar: {
     width: "100%",
     paddingVertical: 20,
-    paddingHorizontal: 16,
     backgroundColor: "#FFF",
-    justifyContent: "space-between",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#F0F1F5",
-    alignSelf: "flex-end",
   },
 });
 

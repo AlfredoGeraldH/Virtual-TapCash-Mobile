@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#F5FEFF",
     alignItems: "center",
     justifyContent: "center",
     gap: 400,
+    margin: "-10%",
   },
 
   font: {

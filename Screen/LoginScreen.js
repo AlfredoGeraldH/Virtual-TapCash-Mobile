@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
+import FilledButton from "../Component/FilledButton";
 
 const data = [
   {
@@ -33,7 +34,7 @@ const data = [
 const renderItem = ({ item }) => {
   return (
     <TouchableOpacity>
-      <View style={{ marginHorizontal: 10, alignItems: "center" }}>
+      <View style={{ marginHorizontal: 18, alignItems: "center" }}>
         <Image source={item.image} />
         <Text>{item.name}</Text>
       </View>
@@ -50,12 +51,17 @@ const LoginScreen = () => {
           Melayani Negeri Kebanggan Bangsa
         </Text>
       </View>
-      <TouchableOpacity style={styles.login}>
-        <View style={{ flexDirection: "row", gap: 8 }}>
-          <Text style={{ fontSize: 16, color: "white" }}>Log in</Text>
-          <Image source={require("../assets/icon/ic_face.png")} />
-        </View>
-      </TouchableOpacity>
+
+      <View></View>
+
+      <View
+        style={{
+          flexDirection: "row",
+          paddingHorizontal: "5%",
+        }}
+      >
+        <FilledButton />
+      </View>
 
       <View style={{ height: 100 }}>
         <FlatList
@@ -65,10 +71,6 @@ const LoginScreen = () => {
           horizontal
         />
       </View>
-
-      {/* <HomeScreen /> */}
-      {/* <CodeScreen /> */}
-      {/* <SplashScreen /> */}
     </View>
   );
 };
@@ -77,26 +79,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#F5FEFF",
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  login: {
-    width: "80%",
-    borderRadius: 8,
-    backgroundColor: "#FF6600",
-    margin: 50,
-    gap: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 18,
-    paddingVertical: 16,
-  },
-  button: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+    marginTop: "-10%",
+    gap: 20,
   },
 
   item: {
