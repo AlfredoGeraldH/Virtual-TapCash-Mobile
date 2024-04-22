@@ -3,10 +3,10 @@ import { StyleSheet, View, Text, } from "react-native";
 import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
 
-const KonfirmasiPembayaran = () => {
+const ConfirmPaymentScreen = () => {
   return (
     <View style={styles.container}>
-      <TopBar />
+      <TopBar title={"Konfirmasi"} />
 
       <View style={styles.card}>
         <View
@@ -94,7 +94,7 @@ const KonfirmasiPembayaran = () => {
       <View style={{ flex: 1 }} />
 
       <View style={styles.bottombar}>
-        <FilledButton />
+        <FilledButton buttontext={"Proses ke Pembayaran"} />
       </View>
     </View>
   );
@@ -136,4 +136,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default KonfirmasiPembayaran;
+export default ConfirmPaymentScreen;

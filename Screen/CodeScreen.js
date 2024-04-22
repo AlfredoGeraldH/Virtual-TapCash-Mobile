@@ -1,12 +1,17 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+} from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
 
 const CodeScreen = () => {
   return (
     <View style={styles.container}>
-      <TopBar />
+      <TopBar title="QR Virtual TapCash" />
       <View
         style={{
           width: "100%",
@@ -32,7 +37,7 @@ const CodeScreen = () => {
       </View>
       <View style={{ flex: 1 }}></View>
       <View style={{ width: "100%" }}>
-        <LightButton buttontext={"Kembali"} />
+        <LightButton buttontext="Kembali" />
       </View>
     </View>
   );
