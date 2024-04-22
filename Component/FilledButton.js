@@ -1,11 +1,11 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
-const FilledButton = () => {
+const FilledButton = ({buttontext, imagesource}) => {
   return (
     <TouchableOpacity style={styles.button}>
       <View style={{ flexDirection: "row", gap: 8 }}>
-        <Text style={{ fontSize: 16, color: "white" }}>Nama button</Text>
-        <Image source={require("../assets/icon/ic_face.png")} />
+        <Text style={{ fontSize: 16, color: "white" }}>{buttontext}</Text>
+        {imagesource ? <Image source={imagesource} /> : <></>}
       </View>
     </TouchableOpacity>
   );
