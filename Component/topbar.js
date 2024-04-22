@@ -1,10 +1,10 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 
-const TopBar = () => {
+const TopBar = ({title}) => {
   return (
     <View style={styles.topbar}>
       <Image source={require("../assets/icon/ic_arrow_left.png")} />
-      <Text style={{ fontSize: 16 }}>NamaScreen</Text>
+      <Text style={{ fontSize: 16 }}>{title}</Text>
       <Image source={require("../assets/icon/ic_information.png")} />
     </View>
   );

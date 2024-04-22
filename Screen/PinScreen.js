@@ -75,7 +75,7 @@ const PinScreen = () => {
 
   return (
     <View style={styles.container}>
-			<TopBar/>
+			<TopBar title="Konfirmasi Pembayaran"/>
 			<Text
             style={{
               fontSize: 16,
