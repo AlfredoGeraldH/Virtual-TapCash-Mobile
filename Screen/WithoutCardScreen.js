@@ -3,9 +3,11 @@ import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
 
 const App = () => {
+  const imagePath = require("../assets/icon/ic_plus.png")
+
   return (
     <View style={styles.container}>
-      <TopBar />
+      <TopBar title ="Virtual TapCash"/>
       <View style={{ alignItems: "center", width: "100%" }}>
         <Image source={require("../assets/card_image.png")} />
         <Text style={{ fontSize: 16, fontWeight: "500" }}>
@@ -16,7 +18,7 @@ const App = () => {
           Virual TapCash
         </Text>
         <View style={{ margin: 10 }}></View>
-        <FilledButton />
+        <FilledButton buttontext={"Tambah Kartu"} imagesource={imagePath} />
       </View>
     </View>
   );

@@ -3,11 +3,11 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
 
-const TopUp = () => {
+const TopUpScreen = () => {
   const onPress = console.log("tekan");
   return (
     <View style={styles.container}>
-      <TopBar />
+      <TopBar title="Top Up TapCash" />
       <View
         style={{
           justifyContent: "space-between",
@@ -145,7 +145,7 @@ const TopUp = () => {
       <View style={{ flex: 1 }} />
 
       <View style={styles.bottombar}>
-        <FilledButton />
+        <FilledButton buttontext={"Selanjutnya"} />
       </View>
     </View>
   );
@@ -196,4 +196,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TopUp;
+export default TopUpScreen;
