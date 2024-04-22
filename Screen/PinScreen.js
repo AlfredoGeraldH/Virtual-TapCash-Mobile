@@ -34,8 +34,7 @@ const PinScreen = () => {
               <TouchableOpacity
                 onPress={() => onPress(item)}
               >
-                <View
-                  style={{
+                <View style={{
                     width: dialPadSize,
                     height: dialPadSize,
                     borderRadius: dialPadSize / 2,
@@ -75,9 +74,7 @@ const PinScreen = () => {
   };
 
   return (
-    <View
-      style={styles.container}
-    >
+    <View style={styles.container}>
 			<TopBar/>
 			<Text
             style={{
