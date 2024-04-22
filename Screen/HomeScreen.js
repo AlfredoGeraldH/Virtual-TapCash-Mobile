@@ -58,7 +58,7 @@ const HomeScreen = () => {
   const onPress = console.log("tekan");
   return (
     <View style={styles.container}>
-      <TopBar title="Virtual TapCash" />
+      <TopBar />
       <View
         style={{
           justifyContent: "space-between",
