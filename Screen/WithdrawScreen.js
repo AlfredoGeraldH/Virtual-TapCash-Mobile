@@ -6,9 +6,11 @@ import TopBar from "../Component/topbar";
 const WithdrawScreen = () => {
   const [number, onChangeNumber] = React.useState("");
   const onPress = console.log("tekan");
+  const imagePath = ""
+
   return (
     <View style={styles.container}>
-      <TopBar />
+      <TopBar title ="Withdraw TapCash"/>
       <View
         style={{
           justifyContent: "space-between",
@@ -86,7 +88,7 @@ const WithdrawScreen = () => {
       <View style={{ flex: 1 }} />
 
       <View style={styles.bottombar}>
-        <FilledButton />
+        <FilledButton buttontext={"Selanjutnya"} />
       </View>
     </View>
   );
