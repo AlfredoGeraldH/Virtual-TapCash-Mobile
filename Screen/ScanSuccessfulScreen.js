@@ -17,7 +17,7 @@ const ScanSuccessfulScreen = () => {
       </View>
       <View style={{ flex: 1 }}></View>
       <View style={{ width: "100%" }}>
-        <LightButton />
+        <LightButton buttontext={"Dashboard Virtual TapCash"} />
       </View>
     </View>
   );

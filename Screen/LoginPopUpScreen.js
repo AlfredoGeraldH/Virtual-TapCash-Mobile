@@ -2,6 +2,7 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import FilledButton from "../Component/FilledButton";
 
 const LoginPopUp = () => {
+  const imagePath = require("../assets/icon/ic_face.png");
   return (
     <View style={styles.card}>
       <View
@@ -28,7 +29,7 @@ const LoginPopUp = () => {
         </View>
       </View>
       <View style={{ width: "110%" }}>
-        <FilledButton />
+        <FilledButton buttontext={"Log In"} imagesource={imagePath} />
       </View>
     </View>
   );

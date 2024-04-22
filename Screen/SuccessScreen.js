@@ -91,7 +91,7 @@ const SuccessScreen = () => {
       <View style={{ flex: 1 }} />
 
       <View style={{ width: "100%" }}>
-        <LightButton />
+        <LightButton buttontext={"Kembali"} />
       </View>
     </View>
   );

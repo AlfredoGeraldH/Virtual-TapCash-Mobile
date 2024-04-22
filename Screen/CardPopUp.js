@@ -26,6 +26,7 @@ const renderItem = ({ item }) => {
   const sampleCallback = (isi) => {
     console.log("nilai callback", isi);
   };
+
   return (
     <View
       style={{
@@ -63,6 +64,7 @@ const renderItem = ({ item }) => {
 };
 
 const CardPopUp = () => {
+  const imagePath = require("../assets/icon/ic_plus_orange.png");
   return (
     <View style={styles.container}>
       <View style={{ height: "30%" }}></View>
@@ -88,7 +90,7 @@ const CardPopUp = () => {
             keyExtractor={(item) => item.id}
           />
         </View>
-        <LightButton />
+        <LightButton imagesource={imagePath} buttontext={"Tambahkan Kartu"} />
       </View>
     </View>
   );

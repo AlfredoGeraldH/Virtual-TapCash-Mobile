@@ -43,16 +43,18 @@ const renderItem = ({ item }) => {
 };
 
 const LoginScreen = () => {
+  const imagePath = require("../assets/icon/ic_face.png");
   return (
     <View style={styles.container}>
       <View style={{ alignItems: "center", gap: 10 }}>
-        <Image source={require("../assets/logo/logo_bni.png")} />
+        <Image
+          style={{ width: 150, height: 50 }}
+          source={require("../assets/logo/logo_bni.png")}
+        />
         <Text style={{ color: "#006599", fontWeight: "600" }}>
           Melayani Negeri Kebanggan Bangsa
         </Text>
       </View>
-
-      <View></View>
 
       <View
         style={{
@@ -60,7 +62,7 @@ const LoginScreen = () => {
           paddingHorizontal: "5%",
         }}
       >
-        <FilledButton />
+        <FilledButton buttontext={"Log In"} imagesource={imagePath} />
       </View>
 
       <View style={{ height: 100 }}>
