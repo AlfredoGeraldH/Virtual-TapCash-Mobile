@@ -25,7 +25,7 @@ const App = () => {
         resizeMode="cover"
         style={styles.image}
       >
-        {/* <HomeScreen /> */}
+        <HomeScreen />
         {/* <CodeScreen /> */}
         {/* <SplashScreen /> */}
         {/* <LoginScreen /> */}

@@ -69,9 +69,24 @@ const HomeScreen = () => {
         }}
       >
         <View>
-          <Text style={{ fontSize: 16, fontWeight: "500" }}>My TapCash 1</Text>
-          <Text style={{ fontSize: 14, color: "#626262" }}>12345678</Text>
+          <View>
+            <Text style={{ fontSize: 16, fontWeight: "500" }}>
+              My TapCash 1
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 5,
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: "#4E4B4B", fontSize: 12 }}>Saldo</Text>
+              <Text style={{ color: "#4E4B4B", fontSize: 16 }}>Rp74.000</Text>
+              <Image source={require("../assets/icon/ic_update.png")} />
+            </View>
+          </View>
         </View>
+
         <Text
           style={{
             fontSize: 14,
