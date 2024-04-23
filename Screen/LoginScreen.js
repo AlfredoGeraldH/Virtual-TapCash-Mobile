@@ -1,19 +1,9 @@
-<<<<<<< HEAD
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  ImageBackground,
-} from "react-native";
-=======
-import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Modal } from "react-native";
->>>>>>> baebbd10876a2c36efe19cabb6395593fba9be28
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Modal, ImageBackground } from "react-native";
 import FilledButton from "../Component/FilledButton";
 import { useState } from "react";
 import LoginPopUp from "./LoginPopUpScreen";
+
+const background = require("../assets/background.png");
 
 const data = [
   {
@@ -38,22 +28,6 @@ const data = [
   },
 ];
 
-<<<<<<< HEAD
-const renderItem = ({ item }) => {
-  return (
-    <TouchableOpacity>
-      <View style={{ marginHorizontal: 18, alignItems: "center" }}>
-        <Image source={item.image} />
-        <Text>{item.name}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-const background = require("../assets/background.png");
-
-=======
->>>>>>> baebbd10876a2c36efe19cabb6395593fba9be28
 const LoginScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -81,14 +55,11 @@ const LoginScreen = () => {
 
   const imagePath = require("../assets/icon/ic_face.png");
   return (
-<<<<<<< HEAD
     <ImageBackground
       source={background}
       resizeMode="cover"
       style={styles.image}
     >
-=======
-    <View style={styles.container}>
       <Modal 
         animationType="slide"
         transparent={true}
@@ -97,7 +68,6 @@ const LoginScreen = () => {
       >
         <LoginPopUp/>
       </Modal>
->>>>>>> baebbd10876a2c36efe19cabb6395593fba9be28
       <View style={{ alignItems: "center", gap: 10 }}>
         <Image
           style={{ width: 150, height: 50 }}
@@ -107,7 +77,7 @@ const LoginScreen = () => {
           Melayani Negeri Kebanggan Bangsa
         </Text>
       </View>
-      <View></View>
+
       <View
         style={{
           flexDirection: "row",
@@ -130,18 +100,28 @@ const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "-10%",
+    gap: 20,
+  },
+
   item: {
     backgroundColor: "#f9c2ff",
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
   },
+
   image: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    gap: 20,
+    gap:20,
   },
 });
 
