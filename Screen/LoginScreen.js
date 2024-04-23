@@ -5,6 +5,7 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import FilledButton from "../Component/FilledButton";
 
@@ -42,10 +43,16 @@ const renderItem = ({ item }) => {
   );
 };
 
+const background = require("../assets/background.png");
+
 const LoginScreen = () => {
   const imagePath = require("../assets/icon/ic_face.png");
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={background}
+      resizeMode="cover"
+      style={styles.image}
+    >
       <View style={{ alignItems: "center", gap: 10 }}>
         <Image
           style={{ width: 150, height: 50 }}
@@ -55,7 +62,7 @@ const LoginScreen = () => {
           Melayani Negeri Kebanggan Bangsa
         </Text>
       </View>
-
+      <View></View>
       <View
         style={{
           flexDirection: "row",
@@ -73,25 +80,23 @@ const LoginScreen = () => {
           horizontal
         />
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "-10%",
-    gap: 20,
-  },
-
   item: {
     backgroundColor: "#f9c2ff",
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    gap: 20,
   },
 });
 

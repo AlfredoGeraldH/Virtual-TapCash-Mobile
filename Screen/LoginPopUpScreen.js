@@ -5,7 +5,14 @@ import { TextInput } from "react-native-gesture-handler";
 const LoginPopUp = () => {
   const imagePath = require("../assets/icon/ic_face.png");
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(52, 52, 52, 0.8)",
+      }}
+    >
       <View style={styles.card}>
         <View
           style={{
