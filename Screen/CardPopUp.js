@@ -8,19 +8,7 @@ import {
 } from "react-native";
 import Tapcash from "../Component/TapCash";
 import LightButton from "../Component/LightButton";
-
-const tapcash = [
-  {
-    id: 1,
-    name: "My Tapcash 1",
-    saldo: "74.000",
-  },
-  {
-    id: 2,
-    name: "My Tapcash 2",
-    saldo: "74.000",
-  },
-];
+import displayAccount from "../Utils/displayAccount";
 
 const renderItem = ({ item }) => {
   const sampleCallback = (isi) => {
@@ -65,6 +53,22 @@ const renderItem = ({ item }) => {
 
 const CardPopUp = () => {
   const imagePath = require("../assets/icon/ic_plus_orange.png");
+
+  const account = displayAccount();
+
+  const tapcash = [
+    {
+      id: 1,
+      name: `${account && account.name}`,
+      saldo: `${account && account.balance}`,
+    },
+    {
+      id: 2,
+      name: `${account && account.name}`,
+      saldo: `${account && account.balance}`,
+    },
+  ];
+
   return (
     <View style={styles.container}>
       <View style={{ height: "30%" }}></View>

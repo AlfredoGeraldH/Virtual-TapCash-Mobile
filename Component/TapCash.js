@@ -1,6 +1,26 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import simulateGetAccount from "../Utils/getAccount";
 
 const Tapcash = () => {
+  const [account, setAccount] = useState();
+
+  const handleAsync = async () => {
+    try {
+      const asyncResult = await simulateGetAccount();
+      console.log("Berhasil", asyncResult);
+      setAccount(asyncResult);
+    } catch (execption) {
+      console.error("catch:", execption);
+    } finally {
+      console.log("okeee");
+    }
+  };
+
+  useEffect(() => {
+    handleAsync();
+  }, []);
+
   return (
     <View style={styles.card}>
       <View
@@ -29,7 +49,7 @@ const Tapcash = () => {
             color: "#FFF",
           }}
         >
-          1234 5678 9101
+          {account && account.card_number}
         </Text>
       </View>
     </View>

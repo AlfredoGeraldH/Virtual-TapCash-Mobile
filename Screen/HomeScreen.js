@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -9,21 +9,8 @@ import {
 } from "react-native";
 import TopBar from "../Component/topbar";
 import Tapcash from "../Component/TapCash";
-
-const transaksi = [
-  {
-    id: 1,
-    name: "Transaksi Masuk",
-    price: "10.000",
-    date: "12/04/2024",
-  },
-  {
-    id: 2,
-    name: "Transaksi Keluar",
-    price: "10.000",
-    date: "8/04/2024",
-  },
-];
+import displayAccount from "../Utils/displayAccount";
+import displayHistory from "../Utils/displayHistory";
 
 const renderItem = ({ item }) => {
   const sampleCallback = (isi) => {
@@ -56,6 +43,25 @@ const renderItem = ({ item }) => {
 
 const HomeScreen = () => {
   const onPress = console.log("Homescreen");
+
+  const transaksi = [
+    {
+      id: 1,
+      name: `${history && history.transaction_name}`,
+      price: `${history && history.nominal}`,
+      date: `${history && history.transaction_date}`,
+    },
+    {
+      id: 2,
+      name: `${history && history.transaction_name}`,
+      price: `${history && history.nominal}`,
+      date: `${history && history.transaction_date}`,
+    },
+  ];
+
+  const account = displayAccount();
+  const history = displayHistory();
+
   return (
     <View style={styles.container}>
       <TopBar />
@@ -71,7 +77,7 @@ const HomeScreen = () => {
         <View>
           <View>
             <Text style={{ fontSize: 16, fontWeight: "500" }}>
-              My TapCash 1
+              {account && account.name}
             </Text>
             <View
               style={{
@@ -81,7 +87,9 @@ const HomeScreen = () => {
               }}
             >
               <Text style={{ color: "#4E4B4B", fontSize: 12 }}>Saldo</Text>
-              <Text style={{ color: "#4E4B4B", fontSize: 16 }}>Rp74.000</Text>
+              <Text style={{ color: "#4E4B4B", fontSize: 16 }}>
+                Rp{account && account.balance}
+              </Text>
               <Image source={require("../assets/icon/ic_update.png")} />
             </View>
           </View>
