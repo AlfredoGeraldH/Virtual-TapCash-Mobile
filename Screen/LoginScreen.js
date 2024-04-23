@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   StyleSheet,
   Text,
@@ -7,7 +8,12 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
+=======
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Modal } from "react-native";
+>>>>>>> baebbd10876a2c36efe19cabb6395593fba9be28
 import FilledButton from "../Component/FilledButton";
+import { useState } from "react";
+import LoginPopUp from "./LoginPopUpScreen";
 
 const data = [
   {
@@ -32,6 +38,7 @@ const data = [
   },
 ];
 
+<<<<<<< HEAD
 const renderItem = ({ item }) => {
   return (
     <TouchableOpacity>
@@ -45,14 +52,52 @@ const renderItem = ({ item }) => {
 
 const background = require("../assets/background.png");
 
+=======
+>>>>>>> baebbd10876a2c36efe19cabb6395593fba9be28
 const LoginScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const buttonCallback = (item) => {
+    if (item.id == 3) {
+      console.log(`${item.name} clicked`)
+      setModalVisible(true)
+    }
+  }
+
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          buttonCallback(item)
+        }}
+      >
+        <View style={{ marginHorizontal: 18, alignItems: "center" }}>
+          <Image source={item.image} />
+          <Text>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   const imagePath = require("../assets/icon/ic_face.png");
   return (
+<<<<<<< HEAD
     <ImageBackground
       source={background}
       resizeMode="cover"
       style={styles.image}
     >
+=======
+    <View style={styles.container}>
+      <Modal 
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        style={{flex: 1, alignItems:'center', justifyContent:'center'}}
+      >
+        <LoginPopUp/>
+      </Modal>
+>>>>>>> baebbd10876a2c36efe19cabb6395593fba9be28
       <View style={{ alignItems: "center", gap: 10 }}>
         <Image
           style={{ width: 150, height: 50 }}
