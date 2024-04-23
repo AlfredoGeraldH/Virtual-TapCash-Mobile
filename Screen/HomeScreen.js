@@ -6,11 +6,57 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Modal,
 } from "react-native";
 import TopBar from "../Component/topbar";
 import Tapcash from "../Component/TapCash";
 import displayAccount from "../Utils/displayAccount";
 import displayHistory from "../Utils/displayHistory";
+import CardPopUp from "./CardPopUp";
+import LightButton from "../Component/LightButton";
+
+const imagePath = require("../assets/icon/ic_plus_orange.png");
+
+const renderItem2 = ({ item }) => {
+  const sampleCallback = (isi) => {
+    console.log("nilai callback", isi);
+  };
+
+  return (
+    <View
+      style={{
+        gap: 5,
+        paddingHorizontal: "10%",
+        paddingVertical: "5%",
+        borderBottomWidth: 1,
+        borderBottomColor: "#F0F1F5",
+      }}
+    >
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <View>
+          <Text style={{ fontSize: 16, fontWeight: "500", color: "#232323" }}>
+            {item?.name}
+          </Text>
+          <Text style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}>
+            Saldo: Rp{item?.saldo}
+          </Text>
+        </View>
+        <TouchableOpacity on>
+          <View style={styles.delete2}>
+            <Image source={require("../assets/icon/ic_delete.png")} />
+            <Text style={{ color: "#B52E2C" }}>Hapus</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <Tapcash />
+    </View>
+  );
+};
 
 const renderItem = ({ item }) => {
   const sampleCallback = (isi) => {
@@ -42,6 +88,8 @@ const renderItem = ({ item }) => {
 };
 
 const HomeScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
   const onPress = console.log("Homescreen");
 
   const transaksi = [
@@ -59,11 +107,69 @@ const HomeScreen = () => {
     },
   ];
 
+  const tapcash = [
+    {
+      id: 1,
+      name: `${account && account.name}`,
+      saldo: `${account && account.balance}`,
+    },
+    {
+      id: 2,
+      name: `${account && account.name}`,
+      saldo: `${account && account.balance}`,
+    },
+  ];
+
   const account = displayAccount();
   const history = displayHistory();
 
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+      >
+        <View style={styles.container2}>
+          <View style={{ height: "30%" }}></View>
+          <View style={styles.card2}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                borderBottomColor: "#F0F1F5",
+                borderBottomWidth: 1,
+                paddingBottom: 16,
+              }}
+            >
+              <Text
+                style={{ fontSize: 16, color: "#232323", fontWeight: "500" }}
+              >
+                TapCash Anda
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(false);
+                }}
+              >
+                <Image source={require("../assets/icon/ic_cancel.png")} />
+              </TouchableOpacity>
+            </View>
+            <View style={{ height: "60%" }}>
+              <FlatList
+                data={tapcash}
+                renderItem={renderItem2}
+                keyExtractor={(item) => item.id}
+              />
+            </View>
+            <LightButton
+              imagesource={imagePath}
+              buttontext={"Tambahkan Kartu"}
+            />
+          </View>
+        </View>
+      </Modal>
       <TopBar />
       <View
         style={{
@@ -95,16 +201,21 @@ const HomeScreen = () => {
           </View>
         </View>
 
-        <Text
-          style={{
-            fontSize: 14,
-            fontWeight: "500",
-            color: "#028CEF",
-            textDecorationLine: "underline",
-          }}
-        >
-          Ganti Kartu
-        </Text>
+        <TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "500",
+              color: "#028CEF",
+              textDecorationLine: "underline",
+            }}
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          >
+            Ganti Kartu
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={{ width: "75%" }}>
         <Tapcash />
@@ -228,6 +339,37 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     shadowColor: "black",
     elevation: 2,
+  },
+
+  container2: {
+    flex: 1,
+    width: "100%",
+    backgroundColor: "rgba(52, 52, 52, 0.8)",
+  },
+  card2: {
+    width: "100%",
+    backgroundColor: "#FFF",
+    padding: 16,
+    borderRadius: 10,
+    gap: 21,
+  },
+
+  headline2: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: "#005E68",
+  },
+
+  delete2: {
+    flexDirection: "row",
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: "#B52E2C",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 18,
+    paddingVertical: 9,
+    gap: 4,
   },
 });
 

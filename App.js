@@ -20,6 +20,7 @@ import LightButton from "./Component/LightButton";
 import FilledButton from "./Component/FilledButton";
 import ConfirmPaymentScreen from "./Screen/ConfirmPaymentScreen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import TopUpScreen from "./Screen/TopUpScreen";
 
 const Stack = createStackNavigator();
 
@@ -52,7 +53,37 @@ const App = () => {
           <Stack.Screen
             options={{ headerShown: false }}
             name="Login"
+            component={LoginScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="HomeWithoutCard"
+            component={HomeWithoutCard}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Home"
             component={HomeScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="ScanCard"
+            component={ScanCardScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="ScanSuccessful"
+            component={ScanSuccessfulScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="TopUp"
+            component={TopUp}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Success"
+            component={SuccessScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

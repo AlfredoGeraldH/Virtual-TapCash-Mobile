@@ -9,6 +9,9 @@ import {
 import Tapcash from "../Component/TapCash";
 import LightButton from "../Component/LightButton";
 import displayAccount from "../Utils/displayAccount";
+import { Link, NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from "./HomeScreen";
 
 const renderItem = ({ item }) => {
   const sampleCallback = (isi) => {
@@ -39,7 +42,7 @@ const renderItem = ({ item }) => {
             Saldo: Rp{item.saldo}
           </Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity on>
           <View style={styles.delete}>
             <Image source={require("../assets/icon/ic_delete.png")} />
             <Text style={{ color: "#B52E2C" }}>Hapus</Text>
@@ -52,6 +55,7 @@ const renderItem = ({ item }) => {
 };
 
 const CardPopUp = () => {
+  const navigation = useNavigation();
   const imagePath = require("../assets/icon/ic_plus_orange.png");
 
   const account = displayAccount();
@@ -85,7 +89,13 @@ const CardPopUp = () => {
           <Text style={{ fontSize: 16, color: "#232323", fontWeight: "500" }}>
             TapCash Anda
           </Text>
-          <Image source={require("../assets/icon/ic_cancel.png")} />
+          <TouchableOpacity
+            onPress={() => {
+              modalVisibleState=true
+            }}
+          >
+            <Image source={require("../assets/icon/ic_cancel.png")} /> 
+          </TouchableOpacity>
         </View>
         <View style={{ height: "60%" }}>
           <FlatList
@@ -104,6 +114,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+    backgroundColor: "rgba(52, 52, 52, 0.8)",
   },
   card: {
     width: "100%",
