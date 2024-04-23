@@ -52,7 +52,7 @@ const App = () => {
           <Stack.Screen
             options={{ headerShown: false }}
             name="Login"
-            component={LoginScreen}
+            component={LoginPopUp}
           />
         </Stack.Navigator>
       </NavigationContainer>
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     marginTop: "10%",
     flex: 1,
     width: "100%",
+    margin: 100,
   },
   image: {
     flex: 1,
