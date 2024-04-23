@@ -1,14 +1,44 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-const SplashScreen = () => {
+import React, { useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
+
+const SplashScreen = ({ navigation }) => {
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate("Login");
+    }, 3000);
+  }, []);
+
+  const background = require("../assets/background.png");
+
   return (
-    <View style={styles.container}>
-      <View style={{ alignItems: "center", gap: 8 }}>
-        <Image source={require("../assets/logo/logo_bni.png")} />
+    <ImageBackground
+      source={background}
+      resizeMode="cover"
+      style={styles.image}
+    >
+      <View style={{ alignItems: "center", gap: 8, marginTop: "45%" }}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+          <Image source={require("../assets/logo/logo_bni.png")} />
+        </TouchableOpacity>
         <Text style={{ fontSize: 14, color: "#005E68", fontWeight: "500" }}>
           Melayani Negeri Kebanggaan Bangsa
         </Text>
       </View>
-      <View style={{ width: "70%", alignItems: "center", gap: 8 }}>
+      <View
+        style={{
+          width: "70%",
+          alignItems: "center",
+          gap: 8,
+          marginTop: "100%",
+        }}
+      >
         <Image source={require("../assets/logo/logo_lps.png")} />
         <Text style={styles.font}>
           PT Bank Negara Indonesia (Persero) Tbk. berizin dan diawasi oleh
@@ -17,24 +47,22 @@ const SplashScreen = () => {
         </Text>
         <Text style={styles.font}>v5.11.1</Text>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 400,
-    margin: "-10%",
-  },
-
   font: {
     color: "#626262",
     fontSize: 10,
     textAlign: "center",
+  },
+
+  image: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   },
 });
 

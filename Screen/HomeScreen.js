@@ -55,7 +55,7 @@ const renderItem = ({ item }) => {
 };
 
 const HomeScreen = () => {
-  const onPress = console.log("tekan");
+  const onPress = console.log("Homescreen");
   return (
     <View style={styles.container}>
       <TopBar />

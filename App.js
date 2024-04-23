@@ -1,4 +1,7 @@
 import { StyleSheet, View, ImageBackground } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
 import HomeWithoutCard from "./Screen/WithoutCardScreen";
 import HomeScreen from "./Screen/HomeScreen";
 import CodeScreen from "./Screen/CodeScreen";
@@ -15,32 +18,45 @@ import Tapcash from "./Component/TapCash";
 import CardPopUp from "./Screen/CardPopUp";
 import LightButton from "./Component/LightButton";
 import FilledButton from "./Component/FilledButton";
+import ConfirmPaymentScreen from "./Screen/ConfirmPaymentScreen";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+
+const Stack = createStackNavigator();
 
 const App = () => {
   const background = require("./assets/background.png");
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={background}
-        resizeMode="cover"
-        style={styles.image}
-      >
-        <HomeScreen />
-        {/* <CodeScreen /> */}
-        {/* <SplashScreen /> */}
-        {/* <LoginScreen /> */}
-        {/* <TopUp /> */}
-        {/* <KonfirmasiPembayaran /> */}
-        {/* <HomeWithoutCard /> */}
-        {/* <WithdrawScreen /> */}
-        {/* <SuccessScreen /> */}
-        {/* <ScanCardScreen /> */}
-        {/* <ScanSuccessfulScreen /> */}
-        {/* <LoginPopUp /> */}
-        {/* <Tapcash /> */}
-        {/* <CardPopUp /> */}
-      </ImageBackground>
-    </View>
+    <>
+      {/* <HomeScreen /> */}
+      {/* <CodeScreen /> */}
+      {/* <SplashScreen /> */}
+      {/* <LoginScreen /> */}
+      {/* <TopUp /> */}
+      {/* <ConfirmPaymentScreen /> */}
+      {/* <HomeWithoutCard /> */}
+      {/* <WithdrawScreen /> */}
+      {/* <SuccessScreen /> */}
+      {/* <ScanCardScreen /> */}
+      {/* <ScanSuccessfulScreen /> */}
+      {/* <LoginPopUp /> */}
+      {/* <Tapcash /> */}
+      {/* <CardPopUp /> */}
+
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Splash">
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Splash"
+            component={SplashScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Login"
+            component={LoginScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 };
 
@@ -49,12 +65,10 @@ const styles = StyleSheet.create({
     marginTop: "10%",
     flex: 1,
     width: "100%",
-    backgroundColor: "#F5F9FA",
   },
   image: {
     flex: 1,
     justifyContent: "center",
-    width: "100%",
     alignItems: "center",
   },
 });
