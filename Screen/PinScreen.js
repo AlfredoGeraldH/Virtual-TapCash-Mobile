@@ -15,7 +15,7 @@ const PinScreen = () => {
     if (pinCode.length == 6) {
 			console.log(pinCode)
 		}
-  });
+  }, [pinCode]);
 
 	
   const DialPad = ({ onPress }) => {
@@ -97,7 +97,13 @@ const PinScreen = () => {
         }}
       >
         {[...Array(pinLength).keys()].map((index) => {
-          const isSelected = !!pinCode[index];
+
+          let isSelected
+          if (pinCode[index] == 0) {
+            isSelected = true
+          } else {
+            isSelected = !!pinCode[index];
+          }
 
           return (
             <View
