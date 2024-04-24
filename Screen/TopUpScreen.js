@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
 
-const TopUpScreen = () => {
+const TopUpScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <TopBar title="Top Up TapCash" />
@@ -143,9 +143,24 @@ const TopUpScreen = () => {
       </View>
       <View style={{ flex: 1 }} />
 
-      <View style={styles.bottombar}>
-        <FilledButton buttontext={"Selanjutnya"} />
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("ConfirmPayment");
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            width: "110%",
+            paddingVertical: 20,
+            paddingHorizontal: 16,
+            backgroundColor: "#FFF",
+            alignItems: "center",
+          }}
+        >
+          <FilledButton buttontext={"Selanjutnya"} />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };

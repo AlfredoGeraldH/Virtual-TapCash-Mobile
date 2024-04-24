@@ -2,15 +2,16 @@ import React from "react";
 import { StyleSheet, View, Text, Image, TextInput } from "react-native";
 import FilledButton from "../Component/FilledButton";
 import TopBar from "../Component/topbar";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const WithdrawScreen = () => {
+const WithdrawScreen = ({ navigation }) => {
   const [number, onChangeNumber] = React.useState("");
   const onPress = console.log("tekan");
-  const imagePath = ""
+  const imagePath = "";
 
   return (
     <View style={styles.container}>
-      <TopBar title ="Withdraw TapCash"/>
+      <TopBar title="Withdraw TapCash" />
       <View
         style={{
           justifyContent: "space-between",
@@ -87,9 +88,24 @@ const WithdrawScreen = () => {
       </View>
       <View style={{ flex: 1 }} />
 
-      <View style={styles.bottombar}>
-        <FilledButton buttontext={"Selanjutnya"} />
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.push("Pin");
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            width: "110%",
+            paddingVertical: 20,
+            paddingHorizontal: 16,
+            backgroundColor: "#FFF",
+            alignItems: "center",
+          }}
+        >
+          <FilledButton buttontext={"Selanjutnya"} />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };

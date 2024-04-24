@@ -1,4 +1,11 @@
-import { Dimensions, FlatList, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 import TopBar from "../Component/topbar";
@@ -8,19 +15,19 @@ const dialPad = [1, 2, 3, 4, 5, 6, 7, 8, 9, "fg", 0, "del"];
 const dialPadSize = width * 0.2;
 const pinLength = 6;
 
-const PinScreen = () => {
+const PinScreen = ({ navigation }) => {
   const [pinCode, setPinCode] = useState([]);
 
-	useEffect(() => {
+  useEffect(() => {
     if (pinCode.length == 6) {
-			console.log(pinCode)
-		}
+      navigation.navigate("Success");
+      console.log(pinCode);
+    }
   }, [pinCode]);
 
-	
   const DialPad = ({ onPress }) => {
     return (
-      <View style={{ height: 420, backgroundColor: '#F5F9FA' }}>
+      <View>
         <FlatList
           data={dialPad}
           numColumns={3}
@@ -31,10 +38,9 @@ const PinScreen = () => {
           contentContainerStyle={{ gap: 30 }}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity
-                onPress={() => onPress(item)}
-              >
-                <View style={{
+              <TouchableOpacity onPress={() => onPress(item)}>
+                <View
+                  style={{
                     width: dialPadSize,
                     height: dialPadSize,
                     borderRadius: dialPadSize / 2,
@@ -75,18 +81,18 @@ const PinScreen = () => {
 
   return (
     <View style={styles.container}>
-			<TopBar title="Konfirmasi Pembayaran"/>
-			<Text
-            style={{
-              fontSize: 16,
-              fontWeight: "500",
-              color: "#232323",
-							marginTop: 24,
-							marginBottom: 8
-            }}
-          >
-            Masukkan PIN
-          </Text>
+      <TopBar title="Konfirmasi Pembayaran" />
+      <Text
+        style={{
+          fontSize: 16,
+          fontWeight: "500",
+          color: "#232323",
+          marginTop: 24,
+          marginBottom: 8,
+        }}
+      >
+        Masukkan PIN
+      </Text>
       <View
         style={{
           flexDirection: "row",
@@ -97,10 +103,9 @@ const PinScreen = () => {
         }}
       >
         {[...Array(pinLength).keys()].map((index) => {
-
-          let isSelected
+          let isSelected;
           if (pinCode[index] == 0) {
-            isSelected = true
+            isSelected = true;
           } else {
             isSelected = !!pinCode[index];
           }
@@ -129,7 +134,7 @@ const PinScreen = () => {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -140,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PinScreen
+export default PinScreen;

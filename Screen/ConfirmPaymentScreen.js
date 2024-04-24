@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, View, Text, } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const ConfirmPaymentScreen = () => {
+const ConfirmPaymentScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <TopBar title={"Konfirmasi"} />
@@ -93,9 +94,24 @@ const ConfirmPaymentScreen = () => {
 
       <View style={{ flex: 1 }} />
 
-      <View style={styles.bottombar}>
-        <FilledButton buttontext={"Proses ke Pembayaran"} />
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.push("Pin");
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            width: "110%",
+            paddingVertical: 20,
+            paddingHorizontal: 16,
+            backgroundColor: "#FFF",
+            alignItems: "center",
+          }}
+        >
+          <FilledButton buttontext={"Proses ke Pembayaran"} />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -19,6 +19,7 @@ import CardPopUp from "./Screen/CardPopUp";
 import LightButton from "./Component/LightButton";
 import FilledButton from "./Component/FilledButton";
 import ConfirmPaymentScreen from "./Screen/ConfirmPaymentScreen";
+import PinScreen from "./Screen/PinScreen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import TopUpScreen from "./Screen/TopUpScreen";
 
@@ -94,6 +95,16 @@ const App = () => {
             options={{ headerShown: false }}
             name="Success"
             component={SuccessScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="ConfirmPayment"
+            component={ConfirmPaymentScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Pin"
+            component={PinScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -2,12 +2,12 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
 
-const App = () => {
-  const imagePath = require("../assets/icon/ic_plus.png")
+const App = ({ navigate }) => {
+  const imagePath = require("../assets/icon/ic_plus.png");
 
   return (
     <View style={styles.container}>
-      <TopBar title ="Virtual TapCash"/>
+      <TopBar title="Virtual TapCash" />
       <View style={{ alignItems: "center", width: "100%" }}>
         <Image source={require("../assets/card_image.png")} />
         <Text style={{ fontSize: 16, fontWeight: "500" }}>
@@ -18,7 +18,24 @@ const App = () => {
           Virual TapCash
         </Text>
         <View style={{ margin: 10 }}></View>
-        <FilledButton buttontext={"Tambah Kartu"} imagesource={imagePath} />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("ScanCard");
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              width: "110%",
+              paddingVertical: 20,
+              paddingHorizontal: 16,
+              backgroundColor: "#FFF",
+              alignItems: "center",
+            }}
+          >
+            <FilledButton buttontext={"Tambah Kartu"} imagesource={imagePath} />
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

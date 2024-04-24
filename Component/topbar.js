@@ -17,7 +17,7 @@ const TopBar = ({ title }) => {
         </View>
       </TouchableOpacity>
       <Text style={{ fontSize: 16 }}>{title}</Text>
-      <Image source={require("../assets/icon/ic_information.png")} />
+      <View style={{marginRight:40}}></View>
     </View>
   );
 };

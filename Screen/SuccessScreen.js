@@ -2,12 +2,11 @@ import React from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const SuccessScreen = () => {
+const SuccessScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <TopBar />
-
       <View
         style={{
           alignItems: "center",
@@ -90,9 +89,24 @@ const SuccessScreen = () => {
 
       <View style={{ flex: 1 }} />
 
-      <View style={{ width: "100%" }}>
-        <LightButton buttontext={"Kembali"} />
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.push("Home");
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            width: "110%",
+            paddingVertical: 20,
+            paddingHorizontal: 16,
+            backgroundColor: "#FFF",
+            alignItems: "center",
+          }}
+        >
+          <LightButton buttontext={"Kembali"} />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -103,6 +117,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     gap: 16,
+    marginTop: "30%",
   },
 
   card: {
