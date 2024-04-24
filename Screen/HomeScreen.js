@@ -11,9 +11,8 @@ import {
 import TopBar from "../Component/topbar";
 import Tapcash from "../Component/TapCash";
 import displayAccount from "../Utils/displayAccount";
-import displayHistory from "../Utils/displayHistory";
-import CardPopUp from "./CardPopUp";
 import LightButton from "../Component/LightButton";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const imagePath = require("../assets/icon/ic_plus_orange.png");
 
@@ -87,41 +86,37 @@ const renderItem = ({ item }) => {
   );
 };
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
-
-  const onPress = console.log("Homescreen");
+  const account = displayAccount();
 
   const transaksi = [
     {
       id: 1,
-      name: `${history && history.transaction_name}`,
-      price: `${history && history.nominal}`,
-      date: `${history && history.transaction_date}`,
+      name: `${account && account.data[0].transaction_name}`,
+      price: `${account && account.data[0].nominal}`,
+      date: `${account && account.data[0].transaction_date}`,
     },
     {
       id: 2,
-      name: `${history && history.transaction_name}`,
-      price: `${history && history.nominal}`,
-      date: `${history && history.transaction_date}`,
+      name: `${account && account.data[1].transaction_name}`,
+      price: `${account && account.data[1].nominal}`,
+      date: `${account && account.data[1].transaction_date}`,
     },
   ];
 
   const tapcash = [
     {
       id: 1,
-      name: `${account && account.name}`,
-      saldo: `${account && account.balance}`,
+      name: `${account && account.data[0].name}`,
+      saldo: `${account && account.data[0].balance}`,
     },
     {
       id: 2,
-      name: `${account && account.name}`,
-      saldo: `${account && account.balance}`,
+      name: `${account && account.data[1].name}`,
+      saldo: `${account && account.data[1].balance}`,
     },
   ];
-
-  const account = displayAccount();
-  const history = displayHistory();
 
   return (
     <View style={styles.container}>
@@ -170,7 +165,7 @@ const HomeScreen = () => {
           </View>
         </View>
       </Modal>
-      <TopBar />
+      <TopBar title={"HomeScreen"} />
       <View
         style={{
           justifyContent: "space-between",
@@ -183,7 +178,7 @@ const HomeScreen = () => {
         <View>
           <View>
             <Text style={{ fontSize: 16, fontWeight: "500" }}>
-              {account && account.name}
+              {account && account.data[0].name}
             </Text>
             <View
               style={{
@@ -194,7 +189,7 @@ const HomeScreen = () => {
             >
               <Text style={{ color: "#4E4B4B", fontSize: 12 }}>Saldo</Text>
               <Text style={{ color: "#4E4B4B", fontSize: 16 }}>
-                Rp{account && account.balance}
+                Rp{account && account.data[0].balance}
               </Text>
               <Image source={require("../assets/icon/ic_update.png")} />
             </View>
@@ -227,12 +222,22 @@ const HomeScreen = () => {
           justifyContent: "center",
         }}
       >
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log("TopUp");
+            navigation.push("TopUp");
+          }}
+        >
           <View style={styles.lightbutton}>
             <Text style={{ fontSize: 12, color: "#005E68" }}>+ Top Up</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log("Withdraw");
+            navigation.push("Withdraw");
+          }}
+        >
           <View style={styles.lightbutton}>
             <Image source={require("../assets/icon/ic_withdraw.png")} />
             <Text style={{ fontSize: 12, color: "#005E68" }}>Withdraw</Text>
@@ -252,7 +257,11 @@ const HomeScreen = () => {
           <Text style={{ width: "60%", fontSize: 12, color: "#626262" }}>
             Pembayaran KRL dan Transjakarta cukup scan QR Virtual Tapcash
           </Text>
-          <TouchableOpacity onPress={onPress}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.push("Code");
+            }}
+          >
             <View style={styles.QRbutton}>
               <Image source={require("../assets/icon/ic_qr.png")} />
               <Text style={{ color: "#FFF" }}>Tampilkan QR Code</Text>

@@ -49,7 +49,7 @@ const Tapcash = () => {
             color: "#FFF",
           }}
         >
-          {account && account.card_number}
+          {account && account.data[0].card_number}
         </Text>
       </View>
     </View>

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "name": "My TapCash 1",
+    "balance": "2.000.000",
+    "card_number": "1234 5678",
+    "transaction_name": "My TapCash 1",
+    "nominal": "2.000.000",
+    "transaction_date": "12345678"
+  },
+  {
+    "id": "2",
+    "name": "My TapCash 2",
+    "balance": "1.000.000",
+    "card_number": "5555 6666",
+    "transaction_name": "My TapCash 1",
+    "nominal": "2.000.000",
+    "transaction_date": "12345678"
+  }
+]

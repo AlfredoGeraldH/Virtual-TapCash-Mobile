@@ -67,6 +67,11 @@ const App = () => {
           />
           <Stack.Screen
             options={{ headerShown: false }}
+            name="Code"
+            component={CodeScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
             name="ScanCard"
             component={ScanCardScreen}
           />
@@ -74,6 +79,11 @@ const App = () => {
             options={{ headerShown: false }}
             name="ScanSuccessful"
             component={ScanSuccessfulScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Withdraw"
+            component={WithdrawScreen}
           />
           <Stack.Screen
             options={{ headerShown: false }}

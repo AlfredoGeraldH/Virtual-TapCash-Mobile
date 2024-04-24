@@ -4,7 +4,6 @@ import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
 
 const TopUpScreen = () => {
-  const onPress = console.log("tekan");
   return (
     <View style={styles.container}>
       <TopBar title="Top Up TapCash" />
@@ -70,17 +69,17 @@ const TopUpScreen = () => {
               gap: 16,
             }}
           >
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={() => console.log("10.000")}>
               <View style={styles.nominalbutton}>
                 <Text>10.000</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={() => console.log("20.000")}>
               <View style={styles.nominalbutton}>
                 <Text>20.000</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={() => console.log("50.000")}>
               <View style={styles.nominalbutton}>
                 <Text>50.000</Text>
               </View>
@@ -97,17 +96,17 @@ const TopUpScreen = () => {
               gap: 16,
             }}
           >
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={() => console.log("100.000")}>
               <View style={styles.nominalbutton}>
                 <Text>100.000</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={() => console.log("250.000")}>
               <View style={styles.nominalbutton}>
                 <Text>250.000</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={() => console.log("500.000")}>
               <View style={styles.nominalbutton}>
                 <Text>500.000</Text>
               </View>
@@ -124,17 +123,17 @@ const TopUpScreen = () => {
               gap: 16,
             }}
           >
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={() => console.log("750.000")}>
               <View style={styles.nominalbutton}>
                 <Text>750.000</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={() => console.log("1.000.000")}>
               <View style={styles.nominalbutton}>
                 <Text>1.000.000</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={() => console.log("2.000.000")}>
               <View style={styles.nominalbutton}>
                 <Text>2.000.000</Text>
               </View>

@@ -7,11 +7,12 @@ import {
   TouchableOpacity,
   Modal,
   ImageBackground,
-  TextInput
+  TextInput,
 } from "react-native";
 import FilledButton from "../Component/FilledButton";
 import { useState } from "react";
 import LoginPopUp from "./LoginPopUpScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const background = require("../assets/background.png");
 
@@ -38,7 +39,7 @@ const data = [
   },
 ];
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const buttonCallback = (item) => {
@@ -97,7 +98,7 @@ const LoginScreen = () => {
               <Text style={{ fontSize: 16, color: "#232323" }}>Log In</Text>
               <TouchableOpacity
                 onPress={() => {
-                  setModalVisible(false)
+                  setModalVisible(false);
                 }}
               >
                 <Image source={require("../assets/icon/ic_cancel.png")} />
@@ -118,10 +119,17 @@ const LoginScreen = () => {
                 </View>
               </View>
             </View>
-
-            <View style={{ width: "110%" }}>
-              <FilledButton buttontext={"Log In"} imagesource={imagePath} />
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("Login inside modal");
+                navigation.push("Home");
+                setModalVisible(false);
+              }}
+            >
+              <View style={{ width: "110%" }}>
+                <FilledButton buttontext={"Log In"} imagesource={imagePath} />
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

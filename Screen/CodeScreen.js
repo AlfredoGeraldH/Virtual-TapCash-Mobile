@@ -1,12 +1,8 @@
 import React from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-} from "react-native";
+import { StyleSheet, View, Text, Image } from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const CodeScreen = () => {
   return (
@@ -36,9 +32,20 @@ const CodeScreen = () => {
         <Image source={require("../assets/qr.png")} />
       </View>
       <View style={{ flex: 1 }}></View>
-      <View style={{ width: "100%" }}>
-        <LightButton buttontext="Kembali" />
-      </View>
+      <TouchableOpacity>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "110%",
+            paddingVertical: 20,
+            paddingHorizontal: 16,
+            backgroundColor: "#FFF",
+            alignItems: "center",
+          }}
+        >
+          <LightButton buttontext="Kembali" />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
