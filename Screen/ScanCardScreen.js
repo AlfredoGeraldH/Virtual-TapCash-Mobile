@@ -4,7 +4,7 @@ import TopBar from "../Component/topbar";
 const ScanCardScreen = () => {
   return (
     <View style={styles.container}>
-      <TopBar />
+      <TopBar title="Virtual TapCash" />
       <View style={{ alignItems: "center", width: "100%" }}>
         <Image source={require("../assets/card_scan.png")} />
         <Text style={{ fontSize: 16, fontWeight: "500" }}>

@@ -2,7 +2,7 @@ import { StyleSheet, View, ImageBackground } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import HomeWithoutCard from "./Screen/WithoutCardScreen";
+import RegisterCardScreen from "./Screen/RegisterCardScreen";
 import HomeScreen from "./Screen/HomeScreen";
 import CodeScreen from "./Screen/CodeScreen";
 import SplashScreen from "./Screen/SplashScreen";
@@ -35,7 +35,7 @@ const App = () => {
       {/* <LoginScreen /> */}
       {/* <TopUp /> */}
       {/* <ConfirmPaymentScreen /> */}
-      {/* <HomeWithoutCard /> */}
+      {/* <RegisterCardScreen /> */}
       {/* <WithdrawScreen /> */}
       {/* <SuccessScreen /> */}
       {/* <ScanCardScreen /> */}
@@ -58,8 +58,8 @@ const App = () => {
           />
           <Stack.Screen
             options={{ headerShown: false }}
-            name="HomeWithoutCard"
-            component={HomeWithoutCard}
+            name="RegisterCard"
+            component={RegisterCardScreen}
           />
           <Stack.Screen
             options={{ headerShown: false }}

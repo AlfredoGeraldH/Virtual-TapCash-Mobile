@@ -133,7 +133,7 @@ const LoginScreen = ({ navigation }) => {
               }}
             >
               <View style={{ width: "110%" }}>
-                <FilledButton buttontext={"Log In"} imagesource={imagePath} />
+                <FilledButton buttontext={"Log In"} />
               </View>
             </TouchableOpacity>
           </View>
@@ -155,7 +155,7 @@ const LoginScreen = ({ navigation }) => {
           paddingHorizontal: "5%",
         }}
       >
-        <FilledButton buttontext={"Log In"} imagesource={imagePath} />
+        <FilledButton buttontext={"Log In"} />
       </View>
 
       <View style={{ height: 100 }}>

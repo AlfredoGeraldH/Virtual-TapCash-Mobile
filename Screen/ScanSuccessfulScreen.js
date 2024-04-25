@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const ScanSuccessfulScreen = () => {
+const ScanSuccessfulScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <TopBar />
+      <TopBar title="Virtual TapCash" />
       <View style={{ alignItems: "center", width: "100%" }}>
         <Image source={require("../assets/scan_success.png")} />
         <Text style={{ fontSize: 16, fontWeight: "500" }}>
@@ -16,9 +17,24 @@ const ScanSuccessfulScreen = () => {
         </Text>
       </View>
       <View style={{ flex: 1 }}></View>
-      <View style={{ width: "100%" }}>
-        <LightButton buttontext={"Dashboard Virtual TapCash"} />
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Home");
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            width: "110%",
+            paddingVertical: 20,
+            paddingHorizontal: 16,
+            backgroundColor: "#FFF",
+            alignItems: "center",
+          }}
+        >
+          <LightButton buttontext={"Dashboard Virtual TapCash"} />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
