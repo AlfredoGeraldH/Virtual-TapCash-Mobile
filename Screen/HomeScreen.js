@@ -13,6 +13,7 @@ import Tapcash from "../Component/TapCash";
 import displayAccount from "../Utils/displayAccount";
 import LightButton from "../Component/LightButton";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AccountDataService from "../api/Services/accountService";
 
 const imagePath = require("../assets/icon/ic_plus_orange.png");
 
@@ -88,33 +89,47 @@ const renderItem = ({ item }) => {
 
 const HomeScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const account = displayAccount();
+  const [account, setAccount] = useState();
+
+  useEffect(() => {
+    const fetchDataAccount = async () => {
+      try {
+        const responseAccountData = await AccountDataService.get(1);
+        console.log(responseAccountData.data.data);
+        setAccount(responseAccountData.data.data);
+        console.log(account);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDataAccount();
+  }, []);
 
   const transaksi = [
     {
       id: 1,
-      name: `${account && account.data[0].transaction_name}`,
-      price: `${account && account.data[0].nominal}`,
-      date: `${account && account.data[0].transaction_date}`,
+      name: `${account && account.email}`,
+      price: `${account && account.last_name}`,
+      date: `${account && account.first_name}`,
     },
     {
       id: 2,
-      name: `${account && account.data[1].transaction_name}`,
-      price: `${account && account.data[1].nominal}`,
-      date: `${account && account.data[1].transaction_date}`,
+      name: `${account && account.email}`,
+      price: `${account && account.last_name}`,
+      date: `${account && account.first_name}`,
     },
   ];
 
   const tapcash = [
     {
       id: 1,
-      name: `${account && account.data[0].name}`,
-      saldo: `${account && account.data[0].balance}`,
+      name: `${account && account.first_name}`,
+      saldo: `${account && account.last_name}`,
     },
     {
       id: 2,
-      name: `${account && account.data[1].name}`,
-      saldo: `${account && account.data[1].balance}`,
+      name: `${account && account.first_name}`,
+      saldo: `${account && account.last_name}`,
     },
   ];
 
@@ -158,10 +173,27 @@ const HomeScreen = ({ navigation }) => {
                 keyExtractor={(item) => item.id}
               />
             </View>
-            <LightButton
-              imagesource={imagePath}
-              buttontext={"Tambahkan Kartu"}
-            />
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("ScanCard");
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  width: "110%",
+                  paddingVertical: 20,
+                  paddingHorizontal: 16,
+                  backgroundColor: "#FFF",
+                  alignItems: "center",
+                }}
+              >
+                <LightButton
+                  imagesource={imagePath}
+                  buttontext={"Tambah Kartu"}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -178,7 +210,7 @@ const HomeScreen = ({ navigation }) => {
         <View>
           <View>
             <Text style={{ fontSize: 16, fontWeight: "500" }}>
-              {account && account.data[0].name}
+              {account && account.first_name}
             </Text>
             <View
               style={{
@@ -189,7 +221,7 @@ const HomeScreen = ({ navigation }) => {
             >
               <Text style={{ color: "#4E4B4B", fontSize: 12 }}>Saldo</Text>
               <Text style={{ color: "#4E4B4B", fontSize: 16 }}>
-                Rp{account && account.data[0].balance}
+                Rp{account && account.last_name}
               </Text>
               <Image source={require("../assets/icon/ic_update.png")} />
             </View>
@@ -317,6 +349,7 @@ const styles = StyleSheet.create({
 
   pembayaran: {
     backgroundColor: "#FFF",
+    padding: 10,
     width: "100%",
     height: "20%",
     gap: 16,

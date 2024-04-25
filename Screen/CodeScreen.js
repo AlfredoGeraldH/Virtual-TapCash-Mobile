@@ -4,7 +4,7 @@ import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const CodeScreen = () => {
+const CodeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <TopBar title="QR Virtual TapCash" />
@@ -32,7 +32,11 @@ const CodeScreen = () => {
         <Image source={require("../assets/qr.png")} />
       </View>
       <View style={{ flex: 1 }}></View>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Home");
+        }}
+      >
         <View
           style={{
             flexDirection: "row",
@@ -43,7 +47,7 @@ const CodeScreen = () => {
             alignItems: "center",
           }}
         >
-          <LightButton buttontext="Kembali" />
+          <LightButton buttontext={"Kembali"} />
         </View>
       </TouchableOpacity>
     </View>

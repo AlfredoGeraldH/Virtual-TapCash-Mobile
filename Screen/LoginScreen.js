@@ -11,12 +11,11 @@ import {
 } from "react-native";
 import FilledButton from "../Component/FilledButton";
 import { useState } from "react";
-import LoginPopUp from "./LoginPopUpScreen";
-import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 const background = require("../assets/background.png");
 
-const data = [
+const akun = [
   {
     id: 1,
     image: require("../assets/icon/ic_wallet.png"),
@@ -107,12 +106,19 @@ const LoginScreen = ({ navigation }) => {
             <View style={{ gap: 12 }}>
               <Text style={styles.headline2}>Username</Text>
               <View style={styles.input2}>
-                <TextInput style={{ width: "100%" }}>12345678</TextInput>
+                <TextInput
+                  style={{ width: "100%" }}
+                  placeholder="Username"
+                ></TextInput>
               </View>
               <Text style={styles.headline2}>MPIN</Text>
               <View style={styles.input2}>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <TextInput style={{ width: "95%" }}>*******</TextInput>
+                  <TextInput
+                    style={{ width: "95%" }}
+                    placeholder="MPIN"
+                    secureTextEntry={true}
+                  ></TextInput>
                   <TouchableOpacity>
                     <Image source={require("../assets/icon/ic_hidden.png")} />
                   </TouchableOpacity>
@@ -154,7 +160,7 @@ const LoginScreen = ({ navigation }) => {
 
       <View style={{ height: 100 }}>
         <FlatList
-          data={data}
+          data={akun}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           horizontal
@@ -171,7 +177,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: "-10%",
-    gap: 20,
+    gap: "5%",
   },
 
   item: {

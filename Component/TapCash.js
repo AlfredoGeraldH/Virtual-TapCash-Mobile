@@ -1,24 +1,24 @@
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import simulateGetAccount from "../Utils/getAccount";
+import displayAccount from "../Utils/displayAccount";
+import AccountDataService from "../api/Services/accountService";
 
 const Tapcash = () => {
   const [account, setAccount] = useState();
 
-  const handleAsync = async () => {
-    try {
-      const asyncResult = await simulateGetAccount();
-      console.log("Berhasil", asyncResult);
-      setAccount(asyncResult);
-    } catch (execption) {
-      console.error("catch:", execption);
-    } finally {
-      console.log("okeee");
-    }
-  };
-
   useEffect(() => {
-    handleAsync();
+    const fetchDataAccount = async () => {
+      try {
+        const responseAccountData = await AccountDataService.get(1);
+        console.log(responseAccountData.data.data);
+        setAccount(responseAccountData.data.data);
+        console.log(account);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDataAccount();
   }, []);
 
   return (
@@ -49,7 +49,7 @@ const Tapcash = () => {
             color: "#FFF",
           }}
         >
-          {account && account.data[0].card_number}
+          {account && account.email}
         </Text>
       </View>
     </View>

@@ -3,8 +3,24 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useFocusEffect } from "@react-navigation/native";
 
 const SuccessScreen = ({ navigation }) => {
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     const onBackPress = () => {
+  //       navigation.navigate('Home');
+  //       return true;
+  //     };
+
+  //     BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+  //     return () =>
+  //       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  //   }, []),
+  // );
+
   return (
     <View style={styles.container}>
       <View
@@ -91,7 +107,7 @@ const SuccessScreen = ({ navigation }) => {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.push("Home");
+          navigation.navigate("Home");
         }}
       >
         <View

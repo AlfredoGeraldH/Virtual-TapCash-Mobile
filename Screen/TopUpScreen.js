@@ -1,9 +1,85 @@
-import React from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
+import {
+  FlatList,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons";
+const { width, height } = Dimensions.get("window");
+
+const DATA = [
+  {
+    id: "1",
+    title: "10.000",
+  },
+  {
+    id: "2",
+    title: "20.000",
+  },
+  {
+    id: "3",
+    title: "50.000",
+  },
+  {
+    id: "4",
+    title: "100.000",
+  },
+  {
+    id: "5",
+    title: "250.000",
+  },
+  {
+    id: "6",
+    title: "500.000",
+  },
+  {
+    id: "7",
+    title: "750.000",
+  },
+  {
+    id: "8",
+    title: "1.000.000",
+  },
+  {
+    id: "9",
+    title: "2.000.000",
+  },
+];
+
+const Item = ({ item, onPress, backgroundColor, textColor }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={[styles.item, { backgroundColor }]}
+  >
+    <Text style={[styles.title, { color: textColor }]}>{item.title}</Text>
+  </TouchableOpacity>
+);
 
 const TopUpScreen = ({ navigation }) => {
+  const [selectedId, setSelectedId] = useState();
+
+  const renderItem = ({ item }) => {
+    const backgroundColor = item.id === selectedId ? "#005E68" : "#FFF";
+    const color = item.id === selectedId ? "white" : "black";
+
+    return (
+      <Item
+        item={item}
+        onPress={() => setSelectedId(item.id)}
+        backgroundColor={backgroundColor}
+        textColor={color}
+      />
+    );
+  };
   return (
     <View style={styles.container}>
       <TopBar title="Top Up TapCash" />
@@ -42,7 +118,6 @@ const TopUpScreen = ({ navigation }) => {
           </Text>
         </View>
       </View>
-
       <View style={styles.card}>
         <View style={{ margin: 20, flexDirection: "column", rowGap: 16 }}>
           <Text style={{ fontSize: 16, fontWeight: "500", color: "#005E68" }}>
@@ -61,86 +136,21 @@ const TopUpScreen = ({ navigation }) => {
 
           <View
             style={{
-              display: "flex",
-              flexDirection: "row",
-              alignContent: "space-between",
               alignItems: "center",
               justifyContent: "center",
-              gap: 16,
             }}
           >
-            <TouchableOpacity onPress={() => console.log("10.000")}>
-              <View style={styles.nominalbutton}>
-                <Text>10.000</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log("20.000")}>
-              <View style={styles.nominalbutton}>
-                <Text>20.000</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log("50.000")}>
-              <View style={styles.nominalbutton}>
-                <Text>50.000</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignContent: "space-between",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 16,
-            }}
-          >
-            <TouchableOpacity onPress={() => console.log("100.000")}>
-              <View style={styles.nominalbutton}>
-                <Text>100.000</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log("250.000")}>
-              <View style={styles.nominalbutton}>
-                <Text>250.000</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log("500.000")}>
-              <View style={styles.nominalbutton}>
-                <Text>500.000</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignContent: "space-between",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 16,
-            }}
-          >
-            <TouchableOpacity onPress={() => console.log("750.000")}>
-              <View style={styles.nominalbutton}>
-                <Text>750.000</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log("1.000.000")}>
-              <View style={styles.nominalbutton}>
-                <Text>1.000.000</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log("2.000.000")}>
-              <View style={styles.nominalbutton}>
-                <Text>2.000.000</Text>
-              </View>
-            </TouchableOpacity>
+            <FlatList
+              data={DATA}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+              extraData={selectedId}
+              numColumns={3}
+            />
           </View>
         </View>
       </View>
+
       <View style={{ flex: 1 }} />
 
       <TouchableOpacity
@@ -207,6 +217,22 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     backgroundColor: "#FFF",
     alignItems: "center",
+  },
+
+  item: {
+    width: "28%",
+    height: 46,
+    padding: 12,
+    marginVertical: 8,
+    marginHorizontal: 8,
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#005E68",
+  },
+  title: {
+    fontSize: 14,
   },
 });
 

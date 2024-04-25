@@ -9,8 +9,12 @@ import {
 import Tapcash from "../Component/TapCash";
 import LightButton from "../Component/LightButton";
 import displayAccount from "../Utils/displayAccount";
-import { Link, NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  Link,
+  NavigationContainer,
+  useNavigation,
+} from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./HomeScreen";
 
 const renderItem = ({ item }) => {
@@ -63,13 +67,13 @@ const CardPopUp = () => {
   const tapcash = [
     {
       id: 1,
-      name: `${account && account.name}`,
-      saldo: `${account && account.balance}`,
+      name: `${account && account.data.first_name}`,
+      saldo: `${account && account.data.last_name}`,
     },
     {
       id: 2,
-      name: `${account && account.name}`,
-      saldo: `${account && account.balance}`,
+      name: `${account && account.data.first_name}`,
+      saldo: `${account && account.data.last_name}`,
     },
   ];
 
@@ -91,10 +95,10 @@ const CardPopUp = () => {
           </Text>
           <TouchableOpacity
             onPress={() => {
-              modalVisibleState=true
+              modalVisibleState = true;
             }}
           >
-            <Image source={require("../assets/icon/ic_cancel.png")} /> 
+            <Image source={require("../assets/icon/ic_cancel.png")} />
           </TouchableOpacity>
         </View>
         <View style={{ height: "60%" }}>
