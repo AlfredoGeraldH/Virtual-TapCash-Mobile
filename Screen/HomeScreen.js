@@ -291,7 +291,7 @@ const HomeScreen = ({ navigation }) => {
           </Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.push("Code");
+              navigation.push("Code", { cardId: account.email });
             }}
           >
             <View style={styles.QRbutton}>

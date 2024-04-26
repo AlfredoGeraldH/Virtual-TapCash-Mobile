@@ -3,8 +3,10 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import QRCode from "react-native-qrcode-svg";
 
-const CodeScreen = ({ navigation }) => {
+const CodeScreen = ({ navigation, route }) => {
+  const { cardId } = route.params;
   return (
     <View style={styles.container}>
       <TopBar title="QR Virtual TapCash" />
@@ -16,7 +18,7 @@ const CodeScreen = ({ navigation }) => {
         }}
       >
         <Text style={{ fontSize: 16, fontWeight: "500" }}>My TapCash 1</Text>
-        <Text style={{ fontSize: 14, color: "#4E4B4B" }}>12345678</Text>
+        <Text style={{ fontSize: 14, color: "#4E4B4B" }}>{cardId}</Text>
       </View>
       <View
         style={{
@@ -29,7 +31,13 @@ const CodeScreen = ({ navigation }) => {
           Scan QR pada scanner ketika tap in dan tap out Commuter Line maupun
           TransJakarta
         </Text>
-        <Image source={require("../assets/qr.png")} />
+        {/* <Image source={require("../assets/qr.png")} /> */}
+        <QRCode
+          value={cardId}
+          size={300}
+          color="black"
+          backgroundColor="white"
+        />
       </View>
       <View style={{ flex: 1 }}></View>
       <TouchableOpacity

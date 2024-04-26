@@ -7,8 +7,6 @@ import {
   ImageBackground,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import simulateGetAccount from "../Utils/getAccount";
-import displayAccount from "../Utils/displayAccount";
 import AccountDataService from "../api/Services/accountService";
 
 background = require("../assets/tapcash.png");
@@ -38,8 +36,10 @@ const Tapcash = () => {
     >
       <View
         style={{
-          justifyContent: "space-between",
+          height: 166,
+          width: 263,
           padding: 15,
+          justifyContent: "space-between",
         }}
       >
         <View
@@ -78,10 +78,9 @@ const Tapcash = () => {
 
 const styles = StyleSheet.create({
   image: {
-    height: 150,
-    justifyContent: "space-between",
-    width: "100%",
-    borderRadius: 12,
+    height: 166,
+    width: 263,
+    marginLeft: "6%",
   },
 });
 
