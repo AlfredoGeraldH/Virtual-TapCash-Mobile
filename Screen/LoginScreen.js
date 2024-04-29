@@ -8,10 +8,12 @@ import {
   Modal,
   ImageBackground,
   TextInput,
+  Alert,
 } from "react-native";
 import FilledButton from "../Component/FilledButton";
-import { useState } from "react";
+import { createContext, useReducer, useState } from "react";
 import axios from "axios";
+import AccountDataService from "../api/Services/accountService";
 
 const background = require("../assets/background.png");
 
@@ -41,6 +43,30 @@ const akun = [
 const LoginScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
+  const fetchToken = () => {
+    const data = {
+      username: username,
+      pin: pin,
+    };
+    const response = AccountDataService.login(data)
+      .then(function (response) {
+        //when returns successfuly
+        console.log(username);
+        console.log(response);
+        console.log(response.data);
+        navigation.navigate("Home");
+      })
+      .catch(function (error) {
+        //when returns error
+        console.log("server rto");
+        console.log(pin);
+        console.log(error);
+        Alert.alert("Error", "Username atau Password salah", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      });
+  };
+
   const buttonCallback = (item) => {
     if (item.id == 3) {
       console.log(`${item.name} clicked`);
@@ -64,6 +90,10 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const imagePath = require("../assets/icon/ic_face.png");
+
+  const [username, onChangeUsername] = useState("");
+  const [pin, onChangePin] = useState("");
+
   return (
     <ImageBackground
       source={background}
@@ -109,6 +139,8 @@ const LoginScreen = ({ navigation }) => {
                 <TextInput
                   style={{ width: "100%" }}
                   placeholder="Username"
+                  onChangeText={onChangeUsername}
+                  value={username}
                 ></TextInput>
               </View>
               <Text style={styles.headline2}>MPIN</Text>
@@ -118,6 +150,8 @@ const LoginScreen = ({ navigation }) => {
                     style={{ width: "95%" }}
                     placeholder="MPIN"
                     secureTextEntry={true}
+                    onChangeText={onChangePin}
+                    value={pin}
                   ></TextInput>
                   <TouchableOpacity>
                     <Image source={require("../assets/icon/ic_hidden.png")} />
@@ -128,7 +162,10 @@ const LoginScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 console.log("Login inside modal");
-                navigation.push("Home");
+                // console.log({username})
+                // console.log({pin})
+                // navigation.push("Home");
+                fetchToken();
                 setModalVisible(false);
               }}
             >
