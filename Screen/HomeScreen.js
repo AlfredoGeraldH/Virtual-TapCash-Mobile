@@ -10,17 +10,17 @@ import {
 } from "react-native";
 import TopBar from "../Component/topbar";
 import Tapcash from "../Component/TapCash";
-import displayAccount from "../Utils/displayAccount";
 import LightButton from "../Component/LightButton";
-import { SafeAreaView } from "react-native-safe-area-context";
 import AccountDataService from "../api/Services/accountService";
+import cardDataService from "../api/Services/cardService";
+import { useTokenStore } from "../tokenStore";
 
 const imagePath = require("../assets/icon/ic_plus_orange.png");
 
 const renderItem2 = ({ item }) => {
-  const sampleCallback = (isi) => {
-    console.log("nilai callback", isi);
-  };
+  // const sampleCallback = (isi) => {
+  //   console.log("nilai callback", isi);
+  // };
 
   return (
     <View
@@ -40,10 +40,10 @@ const renderItem2 = ({ item }) => {
       >
         <View>
           <Text style={{ fontSize: 16, fontWeight: "500", color: "#232323" }}>
-            {item?.name}
+            {item?.cardName}
           </Text>
           <Text style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}>
-            Saldo: Rp{item?.saldo}
+            Saldo: Rp{item?.tapCashBalance}
           </Text>
         </View>
         <TouchableOpacity on>
@@ -59,9 +59,9 @@ const renderItem2 = ({ item }) => {
 };
 
 const renderItem = ({ item }) => {
-  const sampleCallback = (isi) => {
-    console.log("nilai callback", isi);
-  };
+  // const sampleCallback = (isi) => {
+  //   console.log("nilai callback", isi);
+  // };
   return (
     <View
       style={{
@@ -77,11 +77,13 @@ const renderItem = ({ item }) => {
           width: "100%",
         }}
       >
-        <Text style={{ fontSize: 14, color: "#232323" }}>{item.name}</Text>
-        <Text style={{ fontSize: 16, color: "#005E68" }}>Rp{item.price}</Text>
+        <Text style={{ fontSize: 14, color: "#232323" }}>{item.cardName}</Text>
+        <Text style={{ fontSize: 16, color: "#005E68" }}>
+          Rp{item.tapCashBalance}
+        </Text>
       </View>
       <Text style={{ fontSize: 12, fontWeight: "300", color: "#4E4B4B" }}>
-        {item.date}
+        {item.registeredAt}
       </Text>
     </View>
   );
@@ -89,49 +91,30 @@ const renderItem = ({ item }) => {
 
 const HomeScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [account, setAccount] = useState();
+  const [cards, setCards] = useState([]);
+
+  const globalToken = useTokenStore((state) => state.token);
+  const token = globalToken;
+  console.log("home, token:" + globalToken);
 
   useEffect(() => {
     const fetchDataAccount = async () => {
       try {
-        const responseAccountData = await AccountDataService.get(1);
-        console.log(responseAccountData.data.data);
-        setAccount(responseAccountData.data.data);
-        console.log(account);
+        const responseAccountData = await AccountDataService.get(token);
+        console.log(responseAccountData.data);
+        console.log(responseAccountData.data.virtualTapCashId);
+        const responseCardData = await cardDataService.get(
+          token,
+          responseAccountData.data.virtualTapCashId
+        );
+        setCards(responseCardData.data);
+        console.log(responseCardData.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchDataAccount();
   }, []);
-
-  const transaksi = [
-    {
-      id: 1,
-      name: `${account && account.email}`,
-      price: `${account && account.last_name}`,
-      date: `${account && account.first_name}`,
-    },
-    {
-      id: 2,
-      name: `${account && account.email}`,
-      price: `${account && account.last_name}`,
-      date: `${account && account.first_name}`,
-    },
-  ];
-
-  const tapcash = [
-    {
-      id: 1,
-      name: `${account && account.first_name}`,
-      saldo: `${account && account.last_name}`,
-    },
-    {
-      id: 2,
-      name: `${account && account.first_name}`,
-      saldo: `${account && account.last_name}`,
-    },
-  ];
 
   return (
     <View style={styles.container}>
@@ -168,7 +151,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
             <View style={{ height: "60%" }}>
               <FlatList
-                data={tapcash}
+                data={cards}
                 renderItem={renderItem2}
                 keyExtractor={(item) => item.id}
               />
@@ -210,7 +193,7 @@ const HomeScreen = ({ navigation }) => {
         <View>
           <View>
             <Text style={{ fontSize: 16, fontWeight: "500" }}>
-              {account && account.first_name}
+              {cards.filter((card) => card.isDefault === true)[0]?.cardName}
             </Text>
             <View
               style={{
@@ -221,7 +204,11 @@ const HomeScreen = ({ navigation }) => {
             >
               <Text style={{ color: "#4E4B4B", fontSize: 12 }}>Saldo</Text>
               <Text style={{ color: "#4E4B4B", fontSize: 16 }}>
-                Rp{account && account.last_name}
+                Rp
+                {
+                  cards.filter((card) => card.isDefault === true)[0]
+                    ?.tapCashBalance
+                }
               </Text>
               <Image source={require("../assets/icon/ic_update.png")} />
             </View>
@@ -291,7 +278,7 @@ const HomeScreen = ({ navigation }) => {
           </Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.push("Code", { cardId: account.email });
+              navigation.push("Code", { cardId: cards.rfid });
             }}
           >
             <View style={styles.QRbutton}>
@@ -318,7 +305,7 @@ const HomeScreen = ({ navigation }) => {
 
         <View style={{ height: 150 }}>
           <FlatList
-            data={transaksi}
+            data={cards}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
           />

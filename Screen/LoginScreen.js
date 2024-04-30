@@ -11,13 +11,13 @@ import {
   Alert,
 } from "react-native";
 import FilledButton from "../Component/FilledButton";
-import { createContext, useReducer, useState } from "react";
-import axios from "axios";
-import AccountDataService from "../api/Services/accountService";
+import { useState } from "react";
+import AuthDataService from "../api/Services/authService";
+import { useTokenStore } from "../tokenStore";
 
 const background = require("../assets/background.png");
 
-const akun = [
+const item = [
   {
     id: 1,
     image: require("../assets/icon/ic_wallet.png"),
@@ -42,24 +42,30 @@ const akun = [
 
 const LoginScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const globalToken = useTokenStore((state) => state.token);
+  const updateToken = useTokenStore((state) => state.updateToken);
+
+  const [pin, setPin] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const fetchToken = () => {
     const data = {
       username: username,
       pin: pin,
     };
-    const response = AccountDataService.login(data)
+    const response = AuthDataService.login(data)
       .then(function (response) {
         //when returns successfuly
-        console.log(username);
-        console.log(response);
-        console.log(response.data);
+        updateToken("Bearer " + response.data);
         navigation.navigate("Home");
       })
       .catch(function (error) {
         //when returns error
-        console.log("server rto");
-        console.log(pin);
         console.log(error);
         Alert.alert("Error", "Username atau Password salah", [
           { text: "OK", onPress: () => console.log("OK Pressed") },
@@ -92,7 +98,6 @@ const LoginScreen = ({ navigation }) => {
   const imagePath = require("../assets/icon/ic_face.png");
 
   const [username, onChangeUsername] = useState("");
-  const [pin, onChangePin] = useState("");
 
   return (
     <ImageBackground
@@ -149,11 +154,14 @@ const LoginScreen = ({ navigation }) => {
                   <TextInput
                     style={{ width: "95%" }}
                     placeholder="MPIN"
-                    secureTextEntry={true}
-                    onChangeText={onChangePin}
                     value={pin}
+                    secureTextEntry={!showPassword}
+                    onChangeText={setPin}
                   ></TextInput>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    name={showPassword ? "eye-off" : "eye"}
+                    onPress={toggleShowPassword}
+                  >
                     <Image source={require("../assets/icon/ic_hidden.png")} />
                   </TouchableOpacity>
                 </View>
@@ -197,7 +205,7 @@ const LoginScreen = ({ navigation }) => {
 
       <View style={{ height: 100 }}>
         <FlatList
-          data={akun}
+          data={item}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           horizontal

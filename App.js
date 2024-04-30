@@ -17,82 +17,74 @@ import ScanSuccessfulScreen from "./Screen/ScanSuccessfulScreen";
 import ConfirmPaymentScreen from "./Screen/ConfirmPaymentScreen";
 import PinScreen from "./Screen/PinScreen";
 
-import { Provider } from "react-redux";
-import { persistor, store } from "./Redux/store/store";
-import { PersistGate } from "redux-persist/integration/react";
-
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Splash">
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Splash"
-              component={SplashScreen}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Login"
-              component={LoginScreen}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="RegisterCard"
-              component={RegisterCardScreen}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Home"
-              component={HomeScreen}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Code"
-              component={CodeScreen}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="ScanCard"
-              component={ScanCardScreen}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="ScanSuccessful"
-              component={ScanSuccessfulScreen}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Withdraw"
-              component={WithdrawScreen}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="TopUp"
-              component={TopUp}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Success"
-              component={SuccessScreen}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="ConfirmPayment"
-              component={ConfirmPaymentScreen}
-            />
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Pin"
-              component={PinScreen}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PersistGate>
-    </Provider>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Splash">
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Splash"
+          component={SplashScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Login"
+          component={LoginScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="RegisterCard"
+          component={RegisterCardScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Home"
+          component={HomeScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Code"
+          component={CodeScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="ScanCard"
+          component={ScanCardScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="ScanSuccessful"
+          component={ScanSuccessfulScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Withdraw"
+          component={WithdrawScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="TopUp"
+          component={TopUp}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Success"
+          component={SuccessScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="ConfirmPayment"
+          component={ConfirmPaymentScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Pin"
+          component={PinScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
