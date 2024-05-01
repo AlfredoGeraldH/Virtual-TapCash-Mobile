@@ -5,23 +5,54 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 import TopBar from "../Component/topbar";
+import { useTokenStore } from "../tokenStore";
+import topUpAndWithdraw from "../api/Services/topUpAndWithdrawService";
 const { width, height } = Dimensions.get("window");
 
 const dialPad = [1, 2, 3, 4, 5, 6, 7, 8, 9, "fg", 0, "del"];
 const dialPadSize = width * 0.2;
 const pinLength = 6;
 
-const PinScreen = ({ navigation }) => {
+const PinScreen = ({ navigation, route }) => {
   const [pinCode, setPinCode] = useState([]);
+
+  const { nominal, rekening, idCard, type, rfid, virtualTapCashId } =
+    route.params;
+  const pin = pinCode.join("");
+  const token = useTokenStore((state) => state.token);
+
+  const transaction = () => {
+    const data = {
+      cardId: idCard,
+      virtual_tapcash_id: virtualTapCashId,
+      nominal: nominal,
+      type: type,
+      pin: pin,
+    };
+    const response = topUpAndWithdraw
+      .post(token, data)
+      .then(function (response) {
+        //when returns successfuly
+        console.log(response);
+      })
+      .catch(function (error) {
+        //when returns error
+        console.log(error);
+        Alert.alert("Error", "transkasi gagal", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      });
+  };
 
   useEffect(() => {
     if (pinCode.length == 6) {
+      transaction();
       navigation.navigate("Success");
-      console.log(pinCode);
     }
   }, [pinCode]);
 

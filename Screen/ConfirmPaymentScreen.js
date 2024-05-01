@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import topUpAndWithdraw from "../api/Services/topUpAndWithdrawService";
 
-const ConfirmPaymentScreen = ({ navigation }) => {
+const ConfirmPaymentScreen = ({ navigation, route }) => {
+  const { nominal, rekening, price, idCard, type, rfid, virtualTapCashId } =
+    route.params;
+
   return (
     <View style={styles.container}>
       <TopBar title={"Konfirmasi"} />
@@ -42,7 +46,7 @@ const ConfirmPaymentScreen = ({ navigation }) => {
             }}
           >
             <Text style={{ fontWeight: "400" }}>Jenis Transaksi</Text>
-            <Text style={{ fontWeight: "300" }}>Top Up TapCash</Text>
+            <Text style={{ fontWeight: "300" }}>{type}</Text>
           </View>
 
           <View
@@ -57,7 +61,7 @@ const ConfirmPaymentScreen = ({ navigation }) => {
             }}
           >
             <Text style={{ fontWeight: "400" }}>ID TapCash</Text>
-            <Text style={{ fontWeight: "300" }}>1234 5678 9101 1121</Text>
+            <Text style={{ fontWeight: "300" }}>{rfid}</Text>
           </View>
 
           <View
@@ -72,7 +76,7 @@ const ConfirmPaymentScreen = ({ navigation }) => {
             }}
           >
             <Text style={{ fontWeight: "400" }}>Nominal</Text>
-            <Text style={{ fontWeight: "300" }}>Rp50.000</Text>
+            <Text style={{ fontWeight: "300" }}>Rp{price}</Text>
           </View>
 
           <View
@@ -87,7 +91,7 @@ const ConfirmPaymentScreen = ({ navigation }) => {
             }}
           >
             <Text style={{ fontWeight: "400" }}>Rekening Debet</Text>
-            <Text style={{ fontWeight: "300" }}>123456</Text>
+            <Text style={{ fontWeight: "300" }}>{rekening}</Text>
           </View>
         </View>
       </View>
@@ -96,7 +100,15 @@ const ConfirmPaymentScreen = ({ navigation }) => {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.push("Pin");
+          navigation.push("Pin", {
+            nominal: nominal,
+            price: price,
+            rekening: rekening,
+            idCard: idCard,
+            virtualTapCashId: virtualTapCashId,
+            rfid: rfid,
+            type: type,
+          });
         }}
       >
         <View

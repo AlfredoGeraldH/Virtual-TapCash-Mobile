@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -13,45 +13,55 @@ import {
   FlatList,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
-import { Ionicons } from "@expo/vector-icons";
-const { width, height } = Dimensions.get("window");
+import { useTokenStore } from "../tokenStore";
+import AccountDataService from "../api/Services/accountService";
+import cardDataService from "../api/Services/cardService";
 
 const DATA = [
   {
     id: "1",
     title: "10.000",
+    nominal: 10000,
   },
   {
     id: "2",
     title: "20.000",
+    nominal: 20000,
   },
   {
     id: "3",
     title: "50.000",
+    nominal: 50000,
   },
   {
     id: "4",
     title: "100.000",
+    nominal: 100000,
   },
   {
     id: "5",
     title: "250.000",
+    nominal: 250000,
   },
   {
     id: "6",
     title: "500.000",
+    nominal: 500000,
   },
   {
     id: "7",
     title: "750.000",
+    nominal: 750000,
   },
   {
     id: "8",
     title: "1.000.000",
+    nominal: 1000000,
   },
   {
     id: "9",
     title: "2.000.000",
+    nominal: 2000000,
   },
 ];
 
@@ -65,6 +75,31 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
 );
 
 const TopUpScreen = ({ navigation }) => {
+  const [account, setAccount] = useState([]);
+  const [cards, setCards] = useState([]);
+
+  const token = useTokenStore((state) => state.token);
+
+  useEffect(() => {
+    const fetchDataAccount = async () => {
+      try {
+        const responseAccountData = await AccountDataService.get(token);
+        // console.log(responseAccountData.data);
+        setAccount(responseAccountData.data);
+        // console.log(responseAccountData.data.virtualTapCashId);
+        const responseCardData = await cardDataService.get(
+          token,
+          responseAccountData.data.virtualTapCashId
+        );
+        setCards(responseCardData.data);
+        // console.log(responseCardData.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDataAccount();
+  }, []);
+
   const [selectedId, setSelectedId] = useState();
 
   const renderItem = ({ item }) => {
@@ -74,7 +109,11 @@ const TopUpScreen = ({ navigation }) => {
     return (
       <Item
         item={item}
-        onPress={() => setSelectedId(item.id)}
+        onPress={() => {
+          setSelectedId(item.id);
+          price = item.title;
+          nominal = item.nominal;
+        }}
         backgroundColor={backgroundColor}
         textColor={color}
       />
@@ -93,9 +132,11 @@ const TopUpScreen = ({ navigation }) => {
         }}
       >
         <View>
-          <Text style={{ fontSize: 16, fontWeight: "500" }}>My TapCash 1</Text>
+          <Text style={{ fontSize: 16, fontWeight: "500" }}>
+            {cards.filter((card) => card.isDefault === true)[0]?.cardName}
+          </Text>
           <Text style={{ fontSize: 14, fontWeight: "400", color: "#626262" }}>
-            12345678
+            {cards.filter((card) => card.isDefault === true)[0]?.rfid}
           </Text>
         </View>
         <View>
@@ -103,7 +144,8 @@ const TopUpScreen = ({ navigation }) => {
             Saldo saat ini
           </Text>
           <Text style={{ fontSize: 16, fontWeight: "500", color: "#005E68" }}>
-            Rp74.000
+            Rp
+            {cards.filter((card) => card.isDefault === true)[0]?.tapCashBalance}
           </Text>
         </View>
       </View>
@@ -114,7 +156,7 @@ const TopUpScreen = ({ navigation }) => {
             Rekening Debet
           </Text>
           <Text style={{ fontSize: 14, fontWeight: "300", color: "#4E4B4B" }}>
-            1234567
+            {account.accountNumber}
           </Text>
         </View>
       </View>
@@ -155,7 +197,15 @@ const TopUpScreen = ({ navigation }) => {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("ConfirmPayment");
+          navigation.navigate("ConfirmPayment", {
+            price: price,
+            nominal: nominal,
+            rekening: account.accountNumber,
+            idCard: cards.filter((card) => card.isDefault === true)[0]?.cardId,
+            virtualTapCashId: account.virtualTapCashId,
+            rfid: cards.filter((card) => card.isDefault === true)[0]?.rfid,
+            type: "TOPUP",
+          });
         }}
       >
         <View

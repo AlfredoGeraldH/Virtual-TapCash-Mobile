@@ -13,15 +13,12 @@ import Tapcash from "../Component/TapCash";
 import LightButton from "../Component/LightButton";
 import AccountDataService from "../api/Services/accountService";
 import cardDataService from "../api/Services/cardService";
+import TransactionDataService from "../api/Services/transactionService";
 import { useTokenStore } from "../tokenStore";
 
 const imagePath = require("../assets/icon/ic_plus_orange.png");
 
 const renderItem2 = ({ item }) => {
-  // const sampleCallback = (isi) => {
-  //   console.log("nilai callback", isi);
-  // };
-
   return (
     <View
       style={{
@@ -53,15 +50,12 @@ const renderItem2 = ({ item }) => {
           </View>
         </TouchableOpacity>
       </View>
-      <Tapcash />
+      <Tapcash rfid={item?.rfid} />
     </View>
   );
 };
 
 const renderItem = ({ item }) => {
-  // const sampleCallback = (isi) => {
-  //   console.log("nilai callback", isi);
-  // };
   return (
     <View
       style={{
@@ -77,13 +71,13 @@ const renderItem = ({ item }) => {
           width: "100%",
         }}
       >
-        <Text style={{ fontSize: 14, color: "#232323" }}>{item.cardName}</Text>
+        <Text style={{ fontSize: 14, color: "#232323" }}>{item?.type}</Text>
         <Text style={{ fontSize: 16, color: "#005E68" }}>
-          Rp{item.tapCashBalance}
+          Rp{item?.nominal}
         </Text>
       </View>
       <Text style={{ fontSize: 12, fontWeight: "300", color: "#4E4B4B" }}>
-        {item.registeredAt}
+        {item?.createdAt}
       </Text>
     </View>
   );
@@ -92,6 +86,7 @@ const renderItem = ({ item }) => {
 const HomeScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [cards, setCards] = useState([]);
+  const [transactions, setTransactions] = useState([]);
 
   const globalToken = useTokenStore((state) => state.token);
   const token = globalToken;
@@ -101,20 +96,42 @@ const HomeScreen = ({ navigation }) => {
     const fetchDataAccount = async () => {
       try {
         const responseAccountData = await AccountDataService.get(token);
-        console.log(responseAccountData.data);
-        console.log(responseAccountData.data.virtualTapCashId);
+        // console.log(responseAccountData.data);
+        // console.log(responseAccountData.data.virtualTapCashId);
         const responseCardData = await cardDataService.get(
           token,
           responseAccountData.data.virtualTapCashId
         );
         setCards(responseCardData.data);
-        console.log(responseCardData.data);
+        const responseTransactionData = await TransactionDataService.get(
+          token,
+          cards.filter((card) => card.isDefault === true)[0]?.cardId
+        );
+        // console.log("card data: ", responseCardData.data);
+        // console.log("transaction data: ", responseTransactionData.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchDataAccount();
   }, []);
+
+  useEffect(() => {
+    const fetchTransactionData = async (cardId) => {
+      try {
+        const responseTransactionData = await TransactionDataService.get(
+          token,
+          cardId
+        );
+        setTransactions(responseTransactionData.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTransactionData(
+      cards.filter((card) => card.isDefault === true)[0]?.cardId
+    );
+  }, [cards]);
 
   return (
     <View style={styles.container}>
@@ -153,7 +170,7 @@ const HomeScreen = ({ navigation }) => {
               <FlatList
                 data={cards}
                 renderItem={renderItem2}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.cardId}
               />
             </View>
             <TouchableOpacity
@@ -232,7 +249,9 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={{ width: "75%" }}>
-        <Tapcash />
+        <Tapcash
+          rfid={cards.filter((card) => card.isDefault === true)[0]?.rfid}
+        />
       </View>
       <View
         style={{
@@ -278,7 +297,7 @@ const HomeScreen = ({ navigation }) => {
           </Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.push("Code", { cardId: cards.rfid });
+              navigation.push("Code");
             }}
           >
             <View style={styles.QRbutton}>
@@ -305,9 +324,9 @@ const HomeScreen = ({ navigation }) => {
 
         <View style={{ height: 150 }}>
           <FlatList
-            data={cards}
+            data={transactions}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.transactionId}
           />
         </View>
       </View>

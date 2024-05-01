@@ -1,13 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, TextInput } from "react-native";
 import FilledButton from "../Component/FilledButton";
 import TopBar from "../Component/topbar";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useTokenStore } from "../tokenStore";
+import AccountDataService from "../api/Services/accountService";
+import cardDataService from "../api/Services/cardService";
 
 const WithdrawScreen = ({ navigation }) => {
-  const [number, onChangeNumber] = React.useState("");
-  const onPress = console.log("tekan");
-  const imagePath = "";
+  const [number, onChangeNumber] = useState();
+
+  const [account, setAccount] = useState([]);
+  const [cards, setCards] = useState([]);
+
+  const token = useTokenStore((state) => state.token);
+
+  useEffect(() => {
+    const fetchDataAccount = async () => {
+      try {
+        const responseAccountData = await AccountDataService.get(token);
+        // console.log(responseAccountData.data);
+        setAccount(responseAccountData.data);
+        // console.log(responseAccountData.data.virtualTapCashId);
+        const responseCardData = await cardDataService.get(
+          token,
+          responseAccountData.data.virtualTapCashId
+        );
+        setCards(responseCardData.data);
+        // console.log(responseCardData.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDataAccount();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -22,9 +48,11 @@ const WithdrawScreen = ({ navigation }) => {
         }}
       >
         <View>
-          <Text style={{ fontSize: 16, fontWeight: "500" }}>My TapCash 1</Text>
+          <Text style={{ fontSize: 16, fontWeight: "500" }}>
+            {cards.filter((card) => card.isDefault === true)[0]?.cardName}
+          </Text>
           <Text style={{ fontSize: 14, fontWeight: "400", color: "#626262" }}>
-            12345678
+            {cards.filter((card) => card.isDefault === true)[0]?.rfid}
           </Text>
         </View>
         <View>
@@ -32,7 +60,8 @@ const WithdrawScreen = ({ navigation }) => {
             Saldo saat ini
           </Text>
           <Text style={{ fontSize: 16, fontWeight: "500", color: "#005E68" }}>
-            Rp74.000
+            Rp
+            {cards.filter((card) => card.isDefault === true)[0]?.tapCashBalance}
           </Text>
         </View>
       </View>
@@ -58,7 +87,7 @@ const WithdrawScreen = ({ navigation }) => {
             Rekening Tujuan
           </Text>
           <Text style={{ fontSize: 16, fontWeight: "400", color: "#4E4B4B" }}>
-            1234567
+            {account.accountNumber}
           </Text>
 
           <Text
@@ -90,7 +119,15 @@ const WithdrawScreen = ({ navigation }) => {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.push("Pin");
+          navigation.push("ConfirmPayment", {
+            price: number,
+            nominal: number,
+            rekening: account.accountNumber,
+            idCard: cards.filter((card) => card.isDefault === true)[0]?.cardId,
+            virtualTapCashId: account.virtualTapCashId,
+            rfid: cards.filter((card) => card.isDefault === true)[0]?.rfid,
+            type: "WITHDRAW",
+          });
         }}
       >
         <View

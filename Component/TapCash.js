@@ -11,23 +11,7 @@ import AccountDataService from "../api/Services/accountService";
 
 background = require("../assets/tapcash.png");
 
-const Tapcash = () => {
-  const [account, setAccount] = useState();
-
-  useEffect(() => {
-    const fetchDataAccount = async () => {
-      try {
-        const responseAccountData = await AccountDataService.get(1);
-        console.log(responseAccountData.data.data);
-        setAccount(responseAccountData.data.data);
-        console.log(account);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchDataAccount();
-  }, []);
-
+const Tapcash = ({ rfid }) => {
   return (
     <ImageBackground
       source={background}
@@ -68,7 +52,7 @@ const Tapcash = () => {
               color: "#FFF",
             }}
           >
-            {account && account.email}
+            {rfid}
           </Text>
         </View>
       </View>

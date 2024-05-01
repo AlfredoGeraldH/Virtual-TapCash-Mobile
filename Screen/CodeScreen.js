@@ -1,12 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import QRCode from "react-native-qrcode-svg";
+import { useTokenStore } from "../tokenStore";
+import AccountDataService from "../api/Services/accountService";
+import cardDataService from "../api/Services/cardService";
 
-const CodeScreen = ({ navigation, route }) => {
-  const { cardId } = route.params;
+const CodeScreen = ({ navigation }) => {
+  const [cards, setCards] = useState([]);
+
+  const token = useTokenStore((state) => state.token);
+  console.log("CodeScreen, token:" + token);
+
+  useEffect(() => {
+    const fetchDataAccount = async () => {
+      try {
+        const responseAccountData = await AccountDataService.get(token);
+        // console.log(responseAccountData.data);
+        // console.log(responseAccountData.data.virtualTapCashId);
+        const responseCardData = await cardDataService.get(
+          token,
+          responseAccountData.data.virtualTapCashId
+        );
+        setCards(responseCardData.data);
+        // console.log(responseCardData.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDataAccount();
+  }, []);
+
   return (
     <View style={styles.container}>
       <TopBar title="QR Virtual TapCash" />
@@ -17,8 +43,12 @@ const CodeScreen = ({ navigation, route }) => {
           marginTop: 0,
         }}
       >
-        <Text style={{ fontSize: 16, fontWeight: "500" }}>My TapCash 1</Text>
-        <Text style={{ fontSize: 14, color: "#4E4B4B" }}>{cardId}</Text>
+        <Text style={{ fontSize: 16, fontWeight: "500" }}>
+          {cards.filter((card) => card.isDefault === true)[0]?.cardName}
+        </Text>
+        <Text style={{ fontSize: 14, color: "#4E4B4B" }}>
+          {cards.filter((card) => card.isDefault === true)[0]?.rfid}
+        </Text>
       </View>
       <View
         style={{
@@ -33,7 +63,7 @@ const CodeScreen = ({ navigation, route }) => {
         </Text>
         {/* <Image source={require("../assets/qr.png")} /> */}
         <QRCode
-          value={cardId}
+          value={cards.filter((card) => card.isDefault === true)[0]?.cardId}
           size={300}
           color="black"
           backgroundColor="white"
