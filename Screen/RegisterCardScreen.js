@@ -22,7 +22,7 @@ const App = ({ navigation }) => {
       <View style={{ flex: 1 }} />
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("ScanCard");
+          navigation.navigate("RegisterOption");
         }}
       >
         <View

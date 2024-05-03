@@ -15,6 +15,8 @@ import { useState } from "react";
 import AuthDataService from "../api/Services/authService";
 import { useTokenStore } from "../tokenStore";
 import LightButton from "../Component/LightButton";
+import AccountDataService from "../api/Services/accountService";
+import cardDataService from "../api/Services/cardService";
 
 const background = require("../assets/background.png");
 
@@ -65,9 +67,39 @@ const LoginScreen = ({ navigation }) => {
       .then(function (response) {
         //when returns successfuly
         updateToken("Bearer " + response.data);
+        const localToken = "Bearer " + response.data
+        
+        const fetchDataAccount = async () => {
+          try {
+            const responseAccountData = await AccountDataService.get(localToken);
+            console.log("account data: ",responseAccountData.data);
+            // console.log(responseAccountData.data.virtualTapCashId);
+            const responseCardData = await cardDataService.get(
+              localToken,
+              responseAccountData.data.virtualTapCashId
+            );
+            console.log(responseCardData)
+            if (responseCardData.status == 204) {
+              navigation.navigate("RegisterCard")
+            } else if (responseCardData.status == 200) {
+              navigation.navigate("Home")
+            }
+            // setCards(responseCardData.data);
+            // const responseTransactionData = await TransactionDataService.get(
+            //   token,
+            //   cards.filter((card) => card.isDefault === true)[0]?.cardId
+            // );
+            // console.log("card data: ", responseCardData.data);
+            // console.log("transaction data: ", responseTransactionData.data);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+        fetchDataAccount();
+
         setModalVisible(false);
         setIsLoading(false)
-        navigation.navigate("Home");
+        // navigation.navigate("Home");
       })
       .catch(function (error) {
         //when returns error

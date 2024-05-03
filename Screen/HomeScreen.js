@@ -16,6 +16,7 @@ import cardDataService from "../api/Services/cardService";
 import TransactionDataService from "../api/Services/transactionService";
 import { useTokenStore } from "../tokenStore";
 import { RefreshControl, ScrollView } from "react-native-gesture-handler";
+import moment from "moment";
 
 const imagePath = require("../assets/icon/ic_plus_orange.png");
 
@@ -73,12 +74,20 @@ const renderItem = ({ item }) => {
         }}
       >
         <Text style={{ fontSize: 14, color: "#232323" }}>{item?.type}</Text>
-        <Text style={{ fontSize: 16, color: "#005E68" }}>
-          Rp{item?.nominal}
-        </Text>
+
+        {item?.type == "TOPUP" ? (
+          <Text style={{ fontSize: 16, color: "#005E68" }}>
+            + Rp{item?.nominal}
+          </Text>
+        ) : (
+          <Text style={{ fontSize: 16, color: "#EF5A22" }}>
+            - Rp{item?.nominal}
+          </Text>
+        )}
       </View>
       <Text style={{ fontSize: 12, fontWeight: "300", color: "#4E4B4B" }}>
-        {item?.createdAt}
+        {/* {item?.createdAt} */}
+        {moment(item?.createdAt).format("DD/MM/YY")}
       </Text>
     </View>
   );
@@ -89,27 +98,18 @@ const HomeScreen = ({ navigation }) => {
   const [cards, setCards] = useState([]);
   const [transactions, setTransactions] = useState([]);
 
-  const globalToken = useTokenStore((state) => state.token);
-  const token = globalToken;
-  console.log("home, token:" + globalToken);
+  const token = useTokenStore((state) => state.token);
+  console.log("home, token:" + token);
 
   useEffect(() => {
     const fetchDataAccount = async () => {
       try {
         const responseAccountData = await AccountDataService.get(token);
-        // console.log(responseAccountData.data);
-        // console.log(responseAccountData.data.virtualTapCashId);
         const responseCardData = await cardDataService.get(
           token,
           responseAccountData.data.virtualTapCashId
         );
         setCards(responseCardData.data);
-        // const responseTransactionData = await TransactionDataService.get(
-        //   token,
-        //   cards.filter((card) => card.isDefault === true)[0]?.cardId
-        // );
-        // console.log("card data: ", responseCardData.data);
-        // console.log("transaction data: ", responseTransactionData.data);
       } catch (error) {
         console.log(error);
       }
@@ -157,7 +157,6 @@ const HomeScreen = ({ navigation }) => {
           token,
           cardId
         );
-        setTransactions(responseTransactionData.data);
       } catch (error) {
         console.log(error);
       }
@@ -169,6 +168,18 @@ const HomeScreen = ({ navigation }) => {
       setRefreshing(false);
     }, 2000);
   }, []);
+
+  const handleShowQRCode = async () => {
+    try {
+      const response = await TransactionDataService.activateQR(
+        token,
+        cards.filter((card) => card.isDefault === true)[0]?.cardId
+      );
+      // Do something with the response, if needed
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -212,6 +223,7 @@ const HomeScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("RegisterOption");
+                setModalVisible(false);
               }}
             >
               <View
@@ -343,7 +355,7 @@ const HomeScreen = ({ navigation }) => {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                navigation.push("Code");
+                handleShowQRCode(), navigation.push("Code");
               }}
             >
               <View style={styles.QRbutton}>

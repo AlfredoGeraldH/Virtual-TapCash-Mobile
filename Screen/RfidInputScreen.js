@@ -1,12 +1,15 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import TopBar from "../Component/topbar";
-import { useEffect, useState } from "react";
-import nfcManager, { NfcTech } from "react-native-nfc-manager";
 import { TextInput } from "react-native-gesture-handler";
 import FilledButton from "../Component/FilledButton";
 import LightButton from "../Component/LightButton";
+import { useTokenStore } from "../tokenStore";
+import { useState } from "react";
 
-const RfidInputScreen = ({ navigation }) => {
+const RfidInputScreen = ({ navigation, route }) => {
+  const token = useTokenStore((state) => state.token);
+  const { virtualTapCashId } = route.params;
+  const [number, onChangeNumber] = useState();
   return (
     <View style={styles.container}>
       <TopBar title="Tambah TapCash" />
@@ -26,9 +29,10 @@ const RfidInputScreen = ({ navigation }) => {
             color: "#4E4B4B",
             width: "80%",
           }}
-        >
-          Masukkan Kartu
-        </TextInput>
+          onChangeText={onChangeNumber}
+          value={number}
+          placeholder="Masukkan Kartu"
+        ></TextInput>
       </View>
       <View style={{ flex: 1 }}></View>
       <View
@@ -43,7 +47,15 @@ const RfidInputScreen = ({ navigation }) => {
         <TouchableOpacity style={{ width: "50%", marginLeft: 20 }}>
           <LightButton buttontext={"Kembali"} />
         </TouchableOpacity>
-        <TouchableOpacity style={{ width: "50%" }}>
+        <TouchableOpacity
+          style={{ width: "50%" }}
+          onPress={() =>
+            navigation.navigate("RfidSuccess", {
+              rfid: number,
+              virtualTapCashId: virtualTapCashId,
+            })
+          }
+        >
           <FilledButton buttontext={"Selanjutnya"} />
         </TouchableOpacity>
       </View>

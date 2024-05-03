@@ -17,6 +17,7 @@ import ScanSuccessfulScreen from "./Screen/ScanSuccessfulScreen";
 import ConfirmPaymentScreen from "./Screen/ConfirmPaymentScreen";
 import PinScreen from "./Screen/PinScreen";
 import RfidInputScreen from "./Screen/RfidInputScreen";
+import RfidSuccessScreen from "./Screen/RfidSuccessScreen";
 import RegisterOptionScreen from "./Screen/RegisterOptionScreen";
 
 const Stack = createStackNavigator();
@@ -94,6 +95,11 @@ const App = () => {
           options={{ headerShown: false }}
           name="RfidInput"
           component={RfidInputScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="RfidSuccess"
+          component={RfidSuccessScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

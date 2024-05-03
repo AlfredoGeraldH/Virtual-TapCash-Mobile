@@ -7,19 +7,17 @@ import QRCode from "react-native-qrcode-svg";
 import { useTokenStore } from "../tokenStore";
 import AccountDataService from "../api/Services/accountService";
 import cardDataService from "../api/Services/cardService";
+import TransactionDataService from "../api/Services/transactionService";
 
 const CodeScreen = ({ navigation }) => {
   const [cards, setCards] = useState([]);
 
   const token = useTokenStore((state) => state.token);
-  console.log("CodeScreen, token:" + token);
 
   useEffect(() => {
     const fetchDataAccount = async () => {
       try {
         const responseAccountData = await AccountDataService.get(token);
-        // console.log(responseAccountData.data);
-        // console.log(responseAccountData.data.virtualTapCashId);
         const responseCardData = await cardDataService.get(
           token,
           responseAccountData.data.virtualTapCashId
@@ -32,6 +30,43 @@ const CodeScreen = ({ navigation }) => {
     };
     fetchDataAccount();
   }, []);
+
+  const handleCloseQRCode = async () => {
+    try {
+      const response = await TransactionDataService.deactivateQR(
+        token,
+        cards.filter((card) => card.isDefault === true)[0]?.cardId
+      );
+      // Do something with the response, if needed
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [minutes, setMinutes] = useState(1);
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const countdownInterval = setInterval(() => {
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(countdownInterval);
+          navigation.navigate("Home");
+          handleCloseQRCode();
+        } else {
+          setMinutes((prevMinutes) => prevMinutes - 1);
+          setSeconds(59);
+        }
+      } else {
+        setSeconds((prevSeconds) => prevSeconds - 1);
+      }
+    }, 1000);
+    return () => clearInterval(countdownInterval);
+  }, [minutes, seconds]);
+
+  const formatTime = (time) => {
+    return time < 10 ? "0" + time : time.toString();
+  };
 
   return (
     <View style={styles.container}>
@@ -48,6 +83,19 @@ const CodeScreen = ({ navigation }) => {
         </Text>
         <Text style={{ fontSize: 14, color: "#4E4B4B" }}>
           {cards.filter((card) => card.isDefault === true)[0]?.rfid}
+        </Text>
+      </View>
+      <View
+        style={{
+          backgroundColor: "#005E68",
+          paddingHorizontal: 16,
+          borderRadius: 8,
+          paddingVertical: 8,
+          margin: 5,
+        }}
+      >
+        <Text style={{ fontSize: 28, color: "#FFF" }}>
+          {formatTime(minutes)}:{formatTime(seconds)}
         </Text>
       </View>
       <View
@@ -72,7 +120,7 @@ const CodeScreen = ({ navigation }) => {
       <View style={{ flex: 1 }}></View>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Home");
+          handleCloseQRCode(), navigation.navigate("Home");
         }}
       >
         <View

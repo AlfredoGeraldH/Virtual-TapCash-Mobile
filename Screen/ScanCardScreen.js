@@ -1,9 +1,38 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import TopBar from "../Component/topbar";
 import { useEffect, useState } from "react";
-import nfcManager, { NfcTech } from "react-native-nfc-manager";
+import NfcManager, { NfcTech } from "react-native-nfc-manager";
+import { useTokenStore } from "../tokenStore";
+import AccountDataService from "../api/Services/accountService";
+import cardDataService from "../api/Services/cardService";
 
-const ScanCardScreen = ({ navigation }) => {
+NfcManager.start();
+
+const ScanCardScreen = ({ navigation, route }) => {
+  const { virtualTapCashId } = route.params;
+  console.log(virtualTapCashId);
+  const [nfcData, setNfcData] = useState("");
+
+  const readNdef = async () => {
+    try {
+      await NfcManager.requestTechnology(NfcTech.Ndef);
+      const tag = await NfcManager.getTag();
+      // console.warn("Tag found", tag);
+      setNfcData(tag.id);
+      navigation.navigate("ScanSuccessful", {
+        cardId: tag.id,
+        virtualTapCashId: virtualTapCashId,
+      });
+    } catch (ex) {
+      // console.warn("Oops!", ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+  };
+
+  readNdef();
+
+  console.log(nfcData);
 
   return (
     <View style={styles.container}>

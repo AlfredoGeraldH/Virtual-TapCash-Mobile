@@ -6,17 +6,17 @@ import { useEffect } from "react";
 import cardDataService from "../api/Services/cardService";
 import { useTokenStore } from "../tokenStore";
 
-const ScanSuccessfulScreen = ({ navigation, route }) => {
+const RfidSuccessScreen = ({ navigation, route }) => {
   const token = useTokenStore((state) => state.token);
-  const { virtualTapCashId, cardId } = route.params;
+  const { virtualTapCashId, rfid } = route.params;
   useEffect(() => {
     const data = {
-      cardId: cardId,
+      rfid: rfid,
       virtualTapcashId: virtualTapCashId,
     };
     const addCard = async () => {
       try {
-        const responseCardData = await cardDataService.ScanCard(token, data);
+        const responseCardData = await cardDataService.ScanCard2(token, data);
         console.log(responseCardData);
       } catch (error) {
         navigation.navigate("RegisterCard");
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ScanSuccessfulScreen;
+export default RfidSuccessScreen;
