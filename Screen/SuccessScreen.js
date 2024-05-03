@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
-import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useFocusEffect } from "@react-navigation/native";
+import { useTokenStore } from "../tokenStore";
+import TransactionDataService from "../api/Services/transactionService";
 
-const SuccessScreen = ({ navigation }) => {
+const SuccessScreen = ({ navigation, route }) => {
+  const { nominal, rekening, idCard, rfid, type } = route.params;
+
+  const token = useTokenStore((state) => state.token);
+  console.log("success screeen, token:" + token);
+
+  const date = new Date();
+
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+
+  let currentDate = `${day}-${month}-${year}`;
+
   return (
     <View style={styles.container}>
       <View
@@ -24,7 +37,6 @@ const SuccessScreen = ({ navigation }) => {
           Saldo TapCash otomatis berkurang
         </Text>
       </View>
-
       <View style={styles.card}>
         <View
           style={{
@@ -47,43 +59,31 @@ const SuccessScreen = ({ navigation }) => {
           </Text>
 
           <View style={styles.cardinnertext}>
-            <Text style={{ fontWeight: "400" }}>ID Transaksi</Text>
-            <Text style={{ fontWeight: "300" }}>12345667</Text>
-          </View>
-
-          <View style={styles.cardinnertext}>
             <Text style={{ fontWeight: "400" }}>Jenis Transaksi</Text>
-            <Text style={{ fontWeight: "300" }}>Top Up TapCash</Text>
+            <Text style={{ fontWeight: "300" }}>{type}</Text>
           </View>
 
           <View style={styles.cardinnertext}>
             <Text style={{ fontWeight: "400" }}>Tanggal</Text>
-            <Text style={{ fontWeight: "300" }}>12/04/2024</Text>
+            <Text style={{ fontWeight: "300" }}>{currentDate}</Text>
           </View>
 
           <View style={styles.cardinnertext}>
             <Text style={{ fontWeight: "400" }}>ID TapCash</Text>
-            <Text style={{ fontWeight: "300" }}>1234 5678 9101 1121</Text>
+            <Text style={{ fontWeight: "300" }}>{rfid}</Text>
           </View>
 
           <View style={styles.cardinnertext}>
             <Text style={{ fontWeight: "400" }}>Nominal</Text>
-            <Text style={{ fontWeight: "300" }}>Rp50.000</Text>
+            <Text style={{ fontWeight: "300" }}>
+              Rp
+              {nominal}
+            </Text>
           </View>
 
           <View style={styles.cardinnertext}>
             <Text style={{ fontWeight: "400" }}>Rekening Debet</Text>
-            <Text style={{ fontWeight: "300" }}>123456</Text>
-          </View>
-
-          <View style={styles.cardinnertext}>
-            <Text style={{ fontWeight: "400" }}>Biaya Admin</Text>
-            <Text style={{ fontWeight: "300" }}>Rp0</Text>
-          </View>
-
-          <View style={styles.cardinnertext}>
-            <Text style={{ fontWeight: "400" }}>Jumlah dibayarkan</Text>
-            <Text style={{ fontWeight: "300" }}>Rp50.000</Text>
+            <Text style={{ fontWeight: "300" }}>{rekening}</Text>
           </View>
         </View>
       </View>

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
+import LightButton from "../Component/LightButton";
 import {
   FlatList,
   TouchableWithoutFeedback,
@@ -195,32 +196,49 @@ const TopUpScreen = ({ navigation }) => {
 
       <View style={{ flex: 1 }} />
 
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("ConfirmPayment", {
-            price: price,
-            nominal: nominal,
-            rekening: account.accountNumber,
-            idCard: cards.filter((card) => card.isDefault === true)[0]?.cardId,
-            virtualTapCashId: account.virtualTapCashId,
-            rfid: cards.filter((card) => card.isDefault === true)[0]?.rfid,
-            type: "TOPUP",
-          });
-        }}
-      >
+      {!selectedId ? (
         <View
           style={{
             flexDirection: "row",
             width: "110%",
             paddingVertical: 20,
+            marginLeft: 40,
             paddingHorizontal: 16,
             backgroundColor: "#FFF",
             alignItems: "center",
           }}
         >
-          <FilledButton buttontext={"Selanjutnya"} />
+          <LightButton buttontext={"Selanjutnya"} />
         </View>
-      </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("ConfirmPayment", {
+              price: price,
+              nominal: nominal,
+              rekening: account.accountNumber,
+              idCard: cards.filter((card) => card.isDefault === true)[0]
+                ?.cardId,
+              virtualTapCashId: account.virtualTapCashId,
+              rfid: cards.filter((card) => card.isDefault === true)[0]?.rfid,
+              type: "TOPUP",
+            });
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              width: "110%",
+              paddingVertical: 20,
+              paddingHorizontal: 16,
+              backgroundColor: "#FFF",
+              alignItems: "center",
+            }}
+          >
+            <FilledButton buttontext={"Selanjutnya"} />
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

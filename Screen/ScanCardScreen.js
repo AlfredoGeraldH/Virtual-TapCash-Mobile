@@ -1,7 +1,10 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import TopBar from "../Component/topbar";
+import { useEffect, useState } from "react";
+import nfcManager, { NfcTech } from "react-native-nfc-manager";
 
-const ScanCardScreen = () => {
+const ScanCardScreen = ({ navigation }) => {
+
   return (
     <View style={styles.container}>
       <TopBar title="Virtual TapCash" />

@@ -14,6 +14,7 @@ import FilledButton from "../Component/FilledButton";
 import { useState } from "react";
 import AuthDataService from "../api/Services/authService";
 import { useTokenStore } from "../tokenStore";
+import LightButton from "../Component/LightButton";
 
 const background = require("../assets/background.png");
 
@@ -49,6 +50,8 @@ const LoginScreen = ({ navigation }) => {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -62,11 +65,14 @@ const LoginScreen = ({ navigation }) => {
       .then(function (response) {
         //when returns successfuly
         updateToken("Bearer " + response.data);
+        setModalVisible(false);
+        setIsLoading(false)
         navigation.navigate("Home");
       })
       .catch(function (error) {
         //when returns error
         console.log(error);
+        setIsLoading(false)
         Alert.alert("Error", "Username atau Password salah", [
           { text: "OK", onPress: () => console.log("OK Pressed") },
         ]);
@@ -173,12 +179,12 @@ const LoginScreen = ({ navigation }) => {
                 // console.log({username})
                 // console.log({pin})
                 // navigation.push("Home");
+                setIsLoading(true)
                 fetchToken();
-                setModalVisible(false);
               }}
             >
               <View style={{ width: "110%" }}>
-                <FilledButton buttontext={"Log In"} />
+                {isLoading ? <LightButton buttontext={"Loading"}/> : <FilledButton buttontext={"Log In"} />}
               </View>
             </TouchableOpacity>
           </View>

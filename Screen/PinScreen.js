@@ -38,7 +38,6 @@ const PinScreen = ({ navigation, route }) => {
       .post(token, data)
       .then(function (response) {
         //when returns successfuly
-        console.log(response);
       })
       .catch(function (error) {
         //when returns error
@@ -52,7 +51,13 @@ const PinScreen = ({ navigation, route }) => {
   useEffect(() => {
     if (pinCode.length == 6) {
       transaction();
-      navigation.navigate("Success");
+      navigation.navigate("Success", {
+        nominal: nominal,
+        rekening: rekening,
+        idCard: idCard,
+        rfid: rfid,
+        type: type,
+      });
     }
   }, [pinCode]);
 
