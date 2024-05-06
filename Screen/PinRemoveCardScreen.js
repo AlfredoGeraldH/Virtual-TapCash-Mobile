@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import TopBar from "../Component/topbar";
 import { useTokenStore } from "../tokenStore";
 import cardDataService from "../api/Services/cardService";
+import AccountDataService from "../api/Services/accountService";
 const { width, height } = Dimensions.get("window");
 
 const dialPad = [1, 2, 3, 4, 5, 6, 7, 8, 9, "fg", 0, "del"];
@@ -20,6 +21,7 @@ const pinLength = 6;
 
 const PinRemoveCardScreen = ({ navigation, route }) => {
   const [pinCode, setPinCode] = useState([]);
+  const [cards, setCards] = useState([]);
 
   const { idCard } = route.params;
   const pin = pinCode.join("");
@@ -50,10 +52,28 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
       Alert.alert("Berhasil", "Kartu Berhasil Dihapus", [
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
-      navigation.navigate("Home");
-      
+      const fetchDataAccount = async () => {
+        try {
+          const responseAccountData = await AccountDataService.get(token);
+          const responseCardData = await cardDataService.get(
+            token,
+            responseAccountData.data.virtualTapCashId
+          );
+          setCards(responseCardData);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchDataAccount();
+      console.log(cards);
     }
   }, [pinCode]);
+
+  if (cards.status == 204) {
+    navigation.navigate("RegisterCard");
+  } else if (cards.status == 200) {
+    navigation.navigate("Home");
+  }
 
   const DialPad = ({ onPress }) => {
     return (

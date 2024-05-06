@@ -38,6 +38,13 @@ const PinScreen = ({ navigation, route }) => {
       .post(token, data)
       .then(function (response) {
         //when returns successfuly
+        navigation.navigate("Success", {
+          nominal: nominal,
+          rekening: rekening,
+          idCard: idCard,
+          rfid: rfid,
+          type: type,
+        });
       })
       .catch(function (error) {
         //when returns error
@@ -46,18 +53,15 @@ const PinScreen = ({ navigation, route }) => {
           { text: "OK", onPress: () => console.log("OK Pressed") },
         ]);
       });
+    if (response.status == 200) {
+    } else {
+      setPinCode([]);
+    }
   };
 
   useEffect(() => {
     if (pinCode.length == 6) {
       transaction();
-      navigation.navigate("Success", {
-        nominal: nominal,
-        rekening: rekening,
-        idCard: idCard,
-        rfid: rfid,
-        type: type,
-      });
     }
   }, [pinCode]);
 

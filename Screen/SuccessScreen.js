@@ -29,13 +29,27 @@ const SuccessScreen = ({ navigation, route }) => {
           rowGap: 8,
         }}
       >
-        <Image source={require("../assets/icon/ic_success.png")} />
-        <Text style={{ fontSize: 16, fontWeight: "500", color: "#005E68" }}>
-          Withdraw TapCash Berhasil
-        </Text>
-        <Text style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}>
-          Saldo TapCash otomatis berkurang
-        </Text>
+        {type == "TOPUP" ? (
+          <>
+            <Image source={require("../assets/icon/ic_success1.png")} />
+            <Text style={{ fontSize: 16, fontWeight: "500", color: "#005E68" }}>
+              Top Up TapCash Berhasil
+            </Text>
+            <Text style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}>
+              Saldo TapCash otomatis bertambah
+            </Text>
+          </>
+        ) : (
+          <>
+            <Image source={require("../assets/icon/ic_success.png")} />
+            <Text style={{ fontSize: 16, fontWeight: "500", color: "#005E68" }}>
+              Withdraw TapCash Berhasil
+            </Text>
+            <Text style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}>
+              Saldo TapCash otomatis berkurang
+            </Text>
+          </>
+        )}
       </View>
       <View style={styles.card}>
         <View

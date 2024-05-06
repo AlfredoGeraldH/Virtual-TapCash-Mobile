@@ -16,8 +16,6 @@ import cardDataService from "../api/Services/cardService";
 import TransactionDataService from "../api/Services/transactionService";
 import { useTokenStore } from "../tokenStore";
 import { RefreshControl, ScrollView } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
-import PinRemoveCardScreen from "./PinRemoveCardScreen";
 
 const imagePath = require("../assets/icon/ic_plus_orange.png");
 
@@ -39,7 +37,15 @@ const renderItem = ({ item }) => {
       >
         <Text style={{ fontSize: 14, color: "#232323" }}>{item?.type}</Text>
         <Text style={{ fontSize: 16, color: "#005E68" }}>
-          Rp{item?.nominal}
+          {item?.type == "TOPUP" ? (
+            <Text style={{ fontSize: 16, color: "#005E68" }}>
+              + Rp{item?.nominal}
+            </Text>
+          ) : (
+            <Text style={{ fontSize: 16, color: "#EF5A22" }}>
+              - Rp{item?.nominal}
+            </Text>
+          )}
         </Text>
       </View>
       <Text style={{ fontSize: 12, fontWeight: "300", color: "#4E4B4B" }}>
@@ -83,9 +89,12 @@ const HomeScreen = ({ navigation }) => {
               Saldo: Rp{item?.tapCashBalance}
             </Text>
           </View>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate("PinRemoveCard", {idCard: item?.cardId})
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("PinRemoveCard", { idCard: item?.cardId });
+              setModalVisible(false);
+            }}
+          >
             <View style={styles.delete2}>
               <Image source={require("../assets/icon/ic_delete.png")} />
               <Text style={{ color: "#B52E2C" }}>Hapus</Text>
@@ -101,19 +110,11 @@ const HomeScreen = ({ navigation }) => {
     const fetchDataAccount = async () => {
       try {
         const responseAccountData = await AccountDataService.get(token);
-        // console.log(responseAccountData.data);
-        // console.log(responseAccountData.data.virtualTapCashId);
         const responseCardData = await cardDataService.get(
           token,
           responseAccountData.data.virtualTapCashId
         );
         setCards(responseCardData.data);
-        // const responseTransactionData = await TransactionDataService.get(
-        //   token,
-        //   cards.filter((card) => card.isDefault === true)[0]?.cardId
-        // );
-        // console.log("card data: ", responseCardData.data);
-        // console.log("transaction data: ", responseTransactionData.data);
       } catch (error) {
         console.log(error);
       }
@@ -240,7 +241,7 @@ const HomeScreen = ({ navigation }) => {
       </Modal>
       <TopBar title={"HomeScreen"} />
       <View>
-      <ScrollView
+        <ScrollView
           contentContainerStyle={{
             alignItems: "center",
             paddingHorizontal: 16,
@@ -343,7 +344,9 @@ const HomeScreen = ({ navigation }) => {
               source={require("../assets/krl.png")}
             />
             <View style={{ gap: 10 }}>
-              <Text style={{ color: "#F15A23", fontSize: 14, fontWeight: "500" }}>
+              <Text
+                style={{ color: "#F15A23", fontSize: 14, fontWeight: "500" }}
+              >
                 Pembayaran
               </Text>
               <Text style={{ width: "60%", fontSize: 12, color: "#626262" }}>
@@ -449,7 +452,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     shadowColor: "black",
     elevation: 2,
-    marginTop: "-90%",
+    marginTop: "-100%",
   },
 
   card2: {
