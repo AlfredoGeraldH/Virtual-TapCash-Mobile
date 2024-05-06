@@ -16,46 +16,10 @@ import cardDataService from "../api/Services/cardService";
 import TransactionDataService from "../api/Services/transactionService";
 import { useTokenStore } from "../tokenStore";
 import { RefreshControl, ScrollView } from "react-native-gesture-handler";
-import moment from "moment";
+import { useNavigation } from "@react-navigation/native";
+import PinRemoveCardScreen from "./PinRemoveCardScreen";
 
 const imagePath = require("../assets/icon/ic_plus_orange.png");
-
-const renderItem2 = ({ item }) => {
-  return (
-    <View
-      style={{
-        gap: 5,
-        paddingHorizontal: "10%",
-        paddingVertical: "5%",
-        borderBottomWidth: 1,
-        borderBottomColor: "#F0F1F5",
-      }}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <View>
-          <Text style={{ fontSize: 16, fontWeight: "500", color: "#232323" }}>
-            {item?.cardName}
-          </Text>
-          <Text style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}>
-            Saldo: Rp{item?.tapCashBalance}
-          </Text>
-        </View>
-        <TouchableOpacity on>
-          <View style={styles.delete2}>
-            <Image source={require("../assets/icon/ic_delete.png")} />
-            <Text style={{ color: "#B52E2C" }}>Hapus</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <Tapcash rfid={item?.rfid} />
-    </View>
-  );
-};
 
 const renderItem = ({ item }) => {
   return (
@@ -74,20 +38,12 @@ const renderItem = ({ item }) => {
         }}
       >
         <Text style={{ fontSize: 14, color: "#232323" }}>{item?.type}</Text>
-
-        {item?.type == "TOPUP" ? (
-          <Text style={{ fontSize: 16, color: "#005E68" }}>
-            + Rp{item?.nominal}
-          </Text>
-        ) : (
-          <Text style={{ fontSize: 16, color: "#EF5A22" }}>
-            - Rp{item?.nominal}
-          </Text>
-        )}
+        <Text style={{ fontSize: 16, color: "#005E68" }}>
+          Rp{item?.nominal}
+        </Text>
       </View>
       <Text style={{ fontSize: 12, fontWeight: "300", color: "#4E4B4B" }}>
-        {/* {item?.createdAt} */}
-        {moment(item?.createdAt).format("DD/MM/YY")}
+        {item?.createdAt}
       </Text>
     </View>
   );
@@ -98,18 +54,66 @@ const HomeScreen = ({ navigation }) => {
   const [cards, setCards] = useState([]);
   const [transactions, setTransactions] = useState([]);
 
-  const token = useTokenStore((state) => state.token);
-  console.log("home, token:" + token);
+  const globalToken = useTokenStore((state) => state.token);
+  const token = globalToken;
+  console.log("home, token:" + globalToken);
+
+  const renderItem2 = ({ item }) => {
+    return (
+      <View
+        style={{
+          gap: 5,
+          paddingHorizontal: "10%",
+          paddingVertical: "5%",
+          borderBottomWidth: 1,
+          borderBottomColor: "#F0F1F5",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View>
+            <Text style={{ fontSize: 16, fontWeight: "500", color: "#232323" }}>
+              {item?.cardName}
+            </Text>
+            <Text style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}>
+              Saldo: Rp{item?.tapCashBalance}
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => {
+            navigation.navigate("PinRemoveCard", {idCard: item?.cardId})
+          }}>
+            <View style={styles.delete2}>
+              <Image source={require("../assets/icon/ic_delete.png")} />
+              <Text style={{ color: "#B52E2C" }}>Hapus</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <Tapcash rfid={item?.rfid} />
+      </View>
+    );
+  };
 
   useEffect(() => {
     const fetchDataAccount = async () => {
       try {
         const responseAccountData = await AccountDataService.get(token);
+        // console.log(responseAccountData.data);
+        // console.log(responseAccountData.data.virtualTapCashId);
         const responseCardData = await cardDataService.get(
           token,
           responseAccountData.data.virtualTapCashId
         );
         setCards(responseCardData.data);
+        // const responseTransactionData = await TransactionDataService.get(
+        //   token,
+        //   cards.filter((card) => card.isDefault === true)[0]?.cardId
+        // );
+        // console.log("card data: ", responseCardData.data);
+        // console.log("transaction data: ", responseTransactionData.data);
       } catch (error) {
         console.log(error);
       }
@@ -157,6 +161,7 @@ const HomeScreen = ({ navigation }) => {
           token,
           cardId
         );
+        setTransactions(responseTransactionData.data);
       } catch (error) {
         console.log(error);
       }
@@ -168,18 +173,6 @@ const HomeScreen = ({ navigation }) => {
       setRefreshing(false);
     }, 2000);
   }, []);
-
-  const handleShowQRCode = async () => {
-    try {
-      const response = await TransactionDataService.activateQR(
-        token,
-        cards.filter((card) => card.isDefault === true)[0]?.cardId
-      );
-      // Do something with the response, if needed
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -246,127 +239,132 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </Modal>
       <TopBar title={"HomeScreen"} />
+      <View>
       <ScrollView
-        contentContainerStyle={{
-          alignItems: "center",
-          paddingHorizontal: 16,
-          gap: 16,
-          height: "100%",
-          width: "100%",
-        }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View
-          style={{
-            justifyContent: "space-between",
-            width: "100%",
-            flexDirection: "row",
-          }}
-        >
-          <View>
-            <Text style={{ fontSize: 16, fontWeight: "500" }}>
-              {cards.filter((card) => card.isDefault === true)[0]?.cardName}
-            </Text>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 5,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ color: "#4E4B4B", fontSize: 12 }}>Saldo</Text>
-              <Text style={{ color: "#4E4B4B", fontSize: 16 }}>
-                Rp
-                {
-                  cards.filter((card) => card.isDefault === true)[0]
-                    ?.tapCashBalance
-                }
-              </Text>
-              <TouchableOpacity onPress={() => onRefresh()}>
-                <Image source={require("../assets/icon/ic_update.png")} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <TouchableOpacity>
-            <Text
-              style={{
-                fontSize: 14,
-                fontWeight: "500",
-                color: "#028CEF",
-                textDecorationLine: "underline",
-              }}
-              onPress={() => {
-                setModalVisible(true);
-              }}
-            >
-              Ganti Kartu
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ marginLeft: "-7%" }}>
-          <Tapcash
-            rfid={cards.filter((card) => card.isDefault === true)[0]?.rfid}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
+          contentContainerStyle={{
+            alignItems: "center",
+            paddingHorizontal: 16,
             gap: 16,
-            justifyContent: "center",
+            // height: "100%",
+            width: "100%",
           }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
-          <TouchableOpacity
-            onPress={() => {
-              console.log("TopUp");
-              navigation.push("TopUp");
+          <View
+            style={{
+              justifyContent: "space-between",
+              width: "100%",
+              flexDirection: "row",
             }}
           >
-            <View style={styles.lightbutton}>
-              <Text style={{ fontSize: 12, color: "#005E68" }}>+ Top Up</Text>
+            <View>
+              <Text style={{ fontSize: 16, fontWeight: "500" }}>
+                {cards.filter((card) => card.isDefault === true)[0]?.cardName}
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 5,
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ color: "#4E4B4B", fontSize: 12 }}>Saldo</Text>
+                <Text style={{ color: "#4E4B4B", fontSize: 16 }}>
+                  Rp
+                  {
+                    cards.filter((card) => card.isDefault === true)[0]
+                      ?.tapCashBalance
+                  }
+                </Text>
+                <TouchableOpacity onPress={() => onRefresh()}>
+                  <Image source={require("../assets/icon/ic_update.png")} />
+                </TouchableOpacity>
+              </View>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              console.log("Withdraw");
-              navigation.push("Withdraw");
-            }}
-          >
-            <View style={styles.lightbutton}>
-              <Image source={require("../assets/icon/ic_withdraw.png")} />
-              <Text style={{ fontSize: 12, color: "#005E68" }}>Withdraw</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
 
-        <View style={styles.pembayaran}>
-          <Image
-            style={{ width: "40%", height: "100%" }}
-            source={require("../assets/krl.png")}
-          />
-          <View style={{ gap: 10 }}>
-            <Text style={{ color: "#F15A23", fontSize: 14, fontWeight: "500" }}>
-              Pembayaran
-            </Text>
-            <Text style={{ width: "60%", fontSize: 12, color: "#626262" }}>
-              Pembayaran KRL dan Transjakarta cukup scan QR Virtual Tapcash
-            </Text>
+            <TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "500",
+                  color: "#028CEF",
+                  textDecorationLine: "underline",
+                }}
+                onPress={() => {
+                  setModalVisible(true);
+                }}
+              >
+                Ganti Kartu
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ marginLeft: "-7%" }}>
+            <Tapcash
+              rfid={cards.filter((card) => card.isDefault === true)[0]?.rfid}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 16,
+              justifyContent: "center",
+            }}
+          >
             <TouchableOpacity
               onPress={() => {
-                handleShowQRCode(), navigation.push("Code");
+                console.log("TopUp");
+                navigation.push("TopUp");
+                setModalVisible(false);
               }}
             >
-              <View style={styles.QRbutton}>
-                <Image source={require("../assets/icon/ic_qr.png")} />
-                <Text style={{ color: "#FFF" }}>Tampilkan QR Code</Text>
+              <View style={styles.lightbutton}>
+                <Text style={{ fontSize: 12, color: "#005E68" }}>+ Top Up</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("Withdraw");
+                navigation.push("Withdraw");
+                setModalVisible(false);
+              }}
+            >
+              <View style={styles.lightbutton}>
+                <Image source={require("../assets/icon/ic_withdraw.png")} />
+                <Text style={{ fontSize: 12, color: "#005E68" }}>Withdraw</Text>
               </View>
             </TouchableOpacity>
           </View>
-        </View>
-      </ScrollView>
 
+          <View style={styles.pembayaran}>
+            <Image
+              style={{ width: "40%", height: "100%" }}
+              source={require("../assets/krl.png")}
+            />
+            <View style={{ gap: 10 }}>
+              <Text style={{ color: "#F15A23", fontSize: 14, fontWeight: "500" }}>
+                Pembayaran
+              </Text>
+              <Text style={{ width: "60%", fontSize: 12, color: "#626262" }}>
+                Pembayaran KRL dan Transjakarta cukup scan QR Virtual Tapcash
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.push("Code");
+                  setModalVisible(false);
+                }}
+              >
+                <View style={styles.QRbutton}>
+                  <Image source={require("../assets/icon/ic_qr.png")} />
+                  <Text style={{ color: "#FFF" }}>Tampilkan QR Code</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+      <View style={{ flex: 1 }} />
       <View style={styles.historyCard}>
         <Text
           style={{
@@ -451,7 +449,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     shadowColor: "black",
     elevation: 2,
-    marginTop: "-30%",
+    marginTop: "-90%",
   },
 
   card2: {

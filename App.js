@@ -19,6 +19,7 @@ import PinScreen from "./Screen/PinScreen";
 import RfidInputScreen from "./Screen/RfidInputScreen";
 import RfidSuccessScreen from "./Screen/RfidSuccessScreen";
 import RegisterOptionScreen from "./Screen/RegisterOptionScreen";
+import PinRemoveCardScreen from "./Screen/PinRemoveCardScreen";
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,11 @@ const App = () => {
           options={{ headerShown: false }}
           name="Pin"
           component={PinScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="PinRemoveCard"
+          component={PinRemoveCardScreen}
         />
         <Stack.Screen
           options={{ headerShown: false }}

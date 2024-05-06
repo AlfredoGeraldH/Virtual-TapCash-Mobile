@@ -15,6 +15,9 @@ const cardDataService = {
   ScanCard2(token, data) {
     return apiAuth(token).post("api/v1/card/add-card2", data);
   },
+  removeCard(token, data) {
+    return apiAuth(token).patch("api/v1/card/remove-card", data);
+  }
 };
 
 export default cardDataService;
