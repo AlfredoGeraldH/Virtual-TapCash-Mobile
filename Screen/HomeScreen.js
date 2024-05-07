@@ -18,6 +18,7 @@ import TransactionDataService from "../api/Services/transactionService";
 import { useTokenStore } from "../tokenStore";
 import { RefreshControl, ScrollView } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/native";
+import moment from "moment";
 
 const imagePath = require("../assets/icon/ic_plus_orange.png");
 
@@ -40,17 +41,25 @@ const renderItem = ({ item }) => {
         <Text style={{ fontSize: 16, color: "#005E68" }}>
           {item?.type == "TOPUP" ? (
             <Text style={{ fontSize: 16, color: "#005E68" }}>
-              + Rp{item?.nominal}
+              +{" "}
+              {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              }).format(item?.nominal)}
             </Text>
           ) : (
             <Text style={{ fontSize: 16, color: "#EF5A22" }}>
-              - Rp{item?.nominal}
+              -{" "}
+              {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              }).format(item?.nominal)}
             </Text>
           )}
         </Text>
       </View>
       <Text style={{ fontSize: 12, fontWeight: "300", color: "#4E4B4B" }}>
-        {item?.createdAt}
+        {moment(item?.createdAt).format("DD/MM/YY")}
       </Text>
     </View>
   );
@@ -60,8 +69,7 @@ const HomeScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [cards, setCards] = useState([]);
   const [transactions, setTransactions] = useState([]);
-  const [userId, setUserId] = useState();
-  const BackgroundFlatList = (style = { backgroundColor: "#FFF" });
+  const [isDefaultCard, setIsDefaultCard] = useState();
 
   const globalToken = useTokenStore((state) => state.token);
   const token = globalToken;
@@ -112,7 +120,11 @@ const HomeScreen = ({ navigation }) => {
               <Text
                 style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}
               >
-                Saldo: Rp{item?.tapCashBalance}
+                Saldo:{" "}
+                {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                }).format(item?.tapCashBalance)}
               </Text>
             </View>
             <TouchableOpacity
@@ -170,7 +182,6 @@ const HomeScreen = ({ navigation }) => {
           token,
           responseAccountData.data.data.virtualTapCashId
         );
-        setUserId(responseAccountData.data.data.userId);
         setCards(responseCardData.data.data);
         console.log("response card data:", responseCardData.data.data);
       } catch (error) {
@@ -202,6 +213,7 @@ const HomeScreen = ({ navigation }) => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    setTransactions([]);
     const fetchDataAccount = async () => {
       try {
         const responseAccountData = await AccountDataService.get(token);
@@ -352,11 +364,13 @@ const HomeScreen = ({ navigation }) => {
               >
                 <Text style={{ color: "#4E4B4B", fontSize: 12 }}>Saldo</Text>
                 <Text style={{ color: "#4E4B4B", fontSize: 16 }}>
-                  Rp
-                  {
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                  }).format(
                     cards.filter((card) => card.isDefault === true)[0]
                       ?.tapCashBalance
-                  }
+                  )}
                 </Text>
                 <TouchableOpacity onPress={() => onRefresh()}>
                   <Image source={require("../assets/icon/ic_update.png")} />
@@ -463,11 +477,24 @@ const HomeScreen = ({ navigation }) => {
         </Text>
 
         <View style={{ height: 180 }}>
-          <FlatList
-            data={transactions.slice(0, 10)}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.transactionId}
-          />
+          {transactions.length === 0 ? (
+            <Text
+              style={{
+                textAlign: "center",
+                margin: 10,
+                color: "#F15A23",
+                fontWeight: "500",
+              }}
+            >
+              Belum Ada Transaksi
+            </Text>
+          ) : (
+            <FlatList
+              data={transactions.slice(0, 10)}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.transactionId}
+            />
+          )}
         </View>
       </View>
     </View>

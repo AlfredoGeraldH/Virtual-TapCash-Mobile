@@ -42,14 +42,40 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
     console.log("pin remove card:", data);
     const response = cardDataService
       .removeCard(token, data)
-      .then(function (response) {})
+      .then(function (response) {
+        fetchDataAccount();
+      })
       .catch(function (error) {
         //when returns error
         console.log(error);
-        Alert.alert("Error", "transkasi gagal", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          Alert.alert("Error", error.response.data.message, [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+        } else {
+          // If 'error.response.data.message' doesn't exist, show a generic error message
+          Alert.alert("Error", "An error occurred", [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+        }
       });
+  };
+
+  const fetchDataAccount = async () => {
+    try {
+      const responseAccountData = await AccountDataService.get(token);
+      const responseCardData = await cardDataService.get(
+        token,
+        responseAccountData.data.data.virtualTapCashId
+      );
+      setCards(responseCardData);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -58,27 +84,14 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
       Alert.alert("Berhasil", "Kartu Berhasil Dihapus", [
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
-      const fetchDataAccount = async () => {
-        try {
-          const responseAccountData = await AccountDataService.get(token);
-          const responseCardData = await cardDataService.get(
-            token,
-            responseAccountData.data.data.virtualTapCashId
-          );
-          setCards(responseCardData);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchDataAccount();
       console.log(cards);
     }
   }, [pinCode]);
 
-  if (cards.status == 200) {
-    navigation.navigate("Home");
-  } else if (cards.status == 204) {
+  if (cards.status == 204) {
     navigation.navigate("RegisterCard");
+  } else if (cards.status == 200) {
+    navigation.navigate("Home");
   }
 
   const DialPad = ({ onPress }) => {

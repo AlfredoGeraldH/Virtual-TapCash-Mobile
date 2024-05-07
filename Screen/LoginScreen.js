@@ -61,7 +61,7 @@ const LoginScreen = ({ navigation }) => {
   const fetchToken = () => {
     const data = {
       username: username,
-      pin: pin,
+      pin: pin.toString(),
     };
     const response = AuthDataService.login(data)
       .then(function (response) {
@@ -96,10 +96,20 @@ const LoginScreen = ({ navigation }) => {
       .catch(function (error) {
         //when returns error
         console.log(error);
-        setIsLoading(false);
-        Alert.alert("Error", "Username atau Password salah", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          Alert.alert("Error", error.response.data.message, [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+        } else {
+          // If 'error.response.data.message' doesn't exist, show a generic error message
+          Alert.alert("Error", "An error occurred", [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+        }
       });
   };
 
@@ -187,6 +197,7 @@ const LoginScreen = ({ navigation }) => {
                     value={pin}
                     secureTextEntry={!showPassword}
                     onChangeText={setPin}
+                    keyboardType="numeric"
                   ></TextInput>
                   <TouchableOpacity
                     name={showPassword ? "eye-off" : "eye"}

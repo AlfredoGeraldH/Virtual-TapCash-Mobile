@@ -34,7 +34,7 @@ const PinScreen = ({ navigation, route }) => {
       type: type,
       pin: pin,
     };
-    console.log(data)
+    // console.log(data);
     const response = topUpAndWithdraw
       .post(token, data)
       .then(function (response) {
@@ -50,9 +50,20 @@ const PinScreen = ({ navigation, route }) => {
       .catch(function (error) {
         //when returns error
         console.log(error);
-        Alert.alert("Error", "transkasi gagal", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          Alert.alert("Error", error.response.data.message, [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+        } else {
+          // If 'error.response.data.message' doesn't exist, show a generic error message
+          Alert.alert("Error", "An error occurred", [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+        }
       });
     if (response.status == 200) {
     } else {

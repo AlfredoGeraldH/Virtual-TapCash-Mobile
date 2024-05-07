@@ -27,11 +27,20 @@ const ScanSuccessfulScreen = ({ navigation, route }) => {
         const responseCardData = await cardDataService.ScanCard(token, data);
         console.log(responseCardData);
       } catch (error) {
-        navigation.navigate("RegisterCard");
-        Alert.alert("Error", "Kartu Sudah Terdaftar", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
-        console.log(error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          // Extract error message from response
+          const errorMessage = error.response.data.message;
+          navigation.navigate("RegisterOption");
+          Alert.alert("Error", errorMessage, [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+        } else {
+          console.log("An unexpected error occurred:", error);
+        }
       }
     };
     addCard();

@@ -114,7 +114,6 @@ const App = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: "10%",
     flex: 1,
     width: "100%",
     margin: 100,

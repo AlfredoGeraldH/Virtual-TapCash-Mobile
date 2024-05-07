@@ -76,7 +76,12 @@ const ConfirmPaymentScreen = ({ navigation, route }) => {
             }}
           >
             <Text style={{ fontWeight: "400" }}>Nominal</Text>
-            <Text style={{ fontWeight: "300" }}>Rp{price}</Text>
+            <Text style={{ fontWeight: "300" }}>
+              {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              }).format(nominal)}
+            </Text>
           </View>
 
           <View

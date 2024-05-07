@@ -145,8 +145,10 @@ const TopUpScreen = ({ navigation }) => {
             Saldo saat ini
           </Text>
           <Text style={{ fontSize: 16, fontWeight: "500", color: "#005E68" }}>
-            Rp
-            {cards.filter((card) => card.isDefault === true)[0]?.tapCashBalance}
+            {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+            }).format(cards.filter((card) => card.isDefault === true)[0]?.tapCashBalance)}
           </Text>
         </View>
       </View>

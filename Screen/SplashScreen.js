@@ -24,9 +24,7 @@ const SplashScreen = ({ navigation }) => {
       style={styles.image}
     >
       <View style={{ alignItems: "center", gap: 8, marginTop: "45%" }}>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Image source={require("../assets/logo/logo_bni.png")} />
-        </TouchableOpacity>
         <Text style={{ fontSize: 14, color: "#005E68", fontWeight: "500" }}>
           Melayani Negeri Kebanggaan Bangsa
         </Text>

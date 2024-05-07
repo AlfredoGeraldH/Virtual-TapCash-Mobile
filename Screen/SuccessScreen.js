@@ -24,7 +24,7 @@ const SuccessScreen = ({ navigation, route }) => {
     useCallback(() => {
       const onBackPress = () => {
         navigation.navigate("Home");
-        return true;f
+        return true;
       };
 
       BackHandler.addEventListener("hardwareBackPress", onBackPress);
@@ -105,8 +105,10 @@ const SuccessScreen = ({ navigation, route }) => {
           <View style={styles.cardinnertext}>
             <Text style={{ fontWeight: "400" }}>Nominal</Text>
             <Text style={{ fontWeight: "300" }}>
-              Rp
-              {nominal}
+              {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              }).format(nominal)}
             </Text>
           </View>
 
