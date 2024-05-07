@@ -1,10 +1,18 @@
-import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Alert,
+  BackHandler,
+} from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import cardDataService from "../api/Services/cardService";
 import { useTokenStore } from "../tokenStore";
+import { useFocusEffect } from "@react-navigation/native";
 
 const RfidSuccessScreen = ({ navigation, route }) => {
   const token = useTokenStore((state) => state.token);
@@ -28,6 +36,20 @@ const RfidSuccessScreen = ({ navigation, route }) => {
     };
     addCard();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        navigation.navigate("Home");
+        return true;
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
   return (
     <View style={styles.container}>
       <TopBar title="Virtual TapCash" />

@@ -14,7 +14,7 @@ const RegisterOptionScreen = ({ navigation }) => {
     const fetchDataAccount = async () => {
       try {
         const responseAccountData = await AccountDataService.get(token);
-        setVirtualTapcashId(responseAccountData.data.virtualTapCashId);
+        setVirtualTapcashId(responseAccountData.data.data.virtualTapCashId);
       } catch (error) {
         console.log(error);
       }

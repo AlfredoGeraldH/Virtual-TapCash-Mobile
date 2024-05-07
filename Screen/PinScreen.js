@@ -34,6 +34,7 @@ const PinScreen = ({ navigation, route }) => {
       type: type,
       pin: pin,
     };
+    console.log(data)
     const response = topUpAndWithdraw
       .post(token, data)
       .then(function (response) {

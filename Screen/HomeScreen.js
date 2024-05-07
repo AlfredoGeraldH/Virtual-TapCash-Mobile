@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   View,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   Modal,
+  Alert,
 } from "react-native";
 import TopBar from "../Component/topbar";
 import Tapcash from "../Component/TapCash";
@@ -16,6 +17,7 @@ import cardDataService from "../api/Services/cardService";
 import TransactionDataService from "../api/Services/transactionService";
 import { useTokenStore } from "../tokenStore";
 import { RefreshControl, ScrollView } from "react-native-gesture-handler";
+import { useFocusEffect } from "@react-navigation/native";
 
 const imagePath = require("../assets/icon/ic_plus_orange.png");
 
@@ -25,7 +27,6 @@ const renderItem = ({ item }) => {
       style={{
         flex: 1,
         paddingVertical: 8,
-        marginHorizontal: 10,
       }}
     >
       <View
@@ -59,6 +60,8 @@ const HomeScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [cards, setCards] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [userId, setUserId] = useState();
+  const BackgroundFlatList = (style = { backgroundColor: "#FFF" });
 
   const globalToken = useTokenStore((state) => state.token);
   const token = globalToken;
@@ -68,42 +71,95 @@ const HomeScreen = ({ navigation }) => {
     return (
       <View
         style={{
-          gap: 5,
+          gap: 10,
           paddingHorizontal: "10%",
           paddingVertical: "5%",
           borderBottomWidth: 1,
           borderBottomColor: "#F0F1F5",
+          backgroundColor: item?.isDefault == true ? "#f5f2f2" : "#FFF",
         }}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <View>
-            <Text style={{ fontSize: 16, fontWeight: "500", color: "#232323" }}>
-              {item?.cardName}
-            </Text>
-            <Text style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}>
-              Saldo: Rp{item?.tapCashBalance}
-            </Text>
+        {item?.isDefault === true ? (
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#005e68",
+              fontWeight: "500",
+              fontSize: 20,
+            }}
+          >
+            - Active Card -
+          </Text>
+        ) : (
+          ""
+        )}
+
+        <View style={{ gap: 10 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "90%",
+              marginLeft: "5%",
+            }}
+          >
+            <View>
+              <Text
+                style={{ fontSize: 16, fontWeight: "500", color: "#232323" }}
+              >
+                {item?.cardName}
+              </Text>
+              <Text
+                style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}
+              >
+                Saldo: Rp{item?.tapCashBalance}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("PinRemoveCard", {
+                  idUser: item?.user.userId,
+                  idCard: item?.cardId,
+                });
+                setModalVisible(false);
+              }}
+            >
+              <View style={styles.delete2}>
+                <Image source={require("../assets/icon/ic_delete.png")} />
+                <Text style={{ color: "#B52E2C" }}>Hapus</Text>
+              </View>
+            </TouchableOpacity>
           </View>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("PinRemoveCard", { idCard: item?.cardId });
+              changeCard(item?.cardId);
               setModalVisible(false);
             }}
           >
-            <View style={styles.delete2}>
-              <Image source={require("../assets/icon/ic_delete.png")} />
-              <Text style={{ color: "#B52E2C" }}>Hapus</Text>
-            </View>
+            <Tapcash rfid={item?.rfid} />
           </TouchableOpacity>
         </View>
-        <Tapcash rfid={item?.rfid} />
       </View>
     );
+  };
+
+  const changeCard = (idCard) => {
+    const data = {
+      cardId: idCard,
+    };
+    const response = cardDataService
+      .changeCard(token, data)
+      .then(function (response) {
+        //when returns successfuly
+        onRefresh();
+      })
+      .catch(function (error) {
+        //when returns error
+        console.log(error);
+        Alert.alert("Error", "transkasi gagal", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      });
   };
 
   useEffect(() => {
@@ -112,9 +168,11 @@ const HomeScreen = ({ navigation }) => {
         const responseAccountData = await AccountDataService.get(token);
         const responseCardData = await cardDataService.get(
           token,
-          responseAccountData.data.virtualTapCashId
+          responseAccountData.data.data.virtualTapCashId
         );
-        setCards(responseCardData.data);
+        setUserId(responseAccountData.data.data.userId);
+        setCards(responseCardData.data.data);
+        console.log("response card data:", responseCardData.data.data);
       } catch (error) {
         console.log(error);
       }
@@ -129,7 +187,8 @@ const HomeScreen = ({ navigation }) => {
           token,
           cardId
         );
-        setTransactions(responseTransactionData.data);
+        setTransactions(responseTransactionData.data.data);
+        console.log("transaction data: ", responseTransactionData.data.data);
       } catch (error) {
         console.log(error);
       }
@@ -148,9 +207,11 @@ const HomeScreen = ({ navigation }) => {
         const responseAccountData = await AccountDataService.get(token);
         const responseCardData = await cardDataService.get(
           token,
-          responseAccountData.data.virtualTapCashId
+          responseAccountData.data.data.virtualTapCashId
         );
-        setCards(responseCardData.data);
+        setCards(responseCardData.data.data);
+        //console.log("response card data:", responseCardData);
+        // console.log(cards);
       } catch (error) {
         console.log(error);
       }
@@ -162,7 +223,8 @@ const HomeScreen = ({ navigation }) => {
           token,
           cardId
         );
-        setTransactions(responseTransactionData.data);
+        //console.log("transaction:", responseTransactionData);
+        setTransactions(responseTransactionData.data.data);
       } catch (error) {
         console.log(error);
       }
@@ -174,6 +236,24 @@ const HomeScreen = ({ navigation }) => {
       setRefreshing(false);
     }, 2000);
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      onRefresh();
+    }, [])
+  );
+
+  const handleOpenQRCode = async () => {
+    try {
+      const response = await TransactionDataService.activateQR(
+        token,
+        cards.filter((card) => card.isDefault === true)[0]?.cardId
+      );
+      // Do something with the response, if needed
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -191,7 +271,6 @@ const HomeScreen = ({ navigation }) => {
                 justifyContent: "space-between",
                 borderBottomColor: "#F0F1F5",
                 borderBottomWidth: 1,
-                paddingBottom: 16,
               }}
             >
               <Text
@@ -207,7 +286,7 @@ const HomeScreen = ({ navigation }) => {
                 <Image source={require("../assets/icon/ic_cancel.png")} />
               </TouchableOpacity>
             </View>
-            <View style={{ height: "60%" }}>
+            <View style={{ height: "74%" }}>
               <FlatList
                 data={cards}
                 renderItem={renderItem2}
@@ -239,7 +318,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-      <TopBar title={"HomeScreen"} />
+      <TopBar title={"Virtual TapCash"} />
       <View>
         <ScrollView
           contentContainerStyle={{
@@ -355,6 +434,7 @@ const HomeScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => {
                   navigation.push("Code");
+                  handleOpenQRCode();
                   setModalVisible(false);
                 }}
               >
@@ -461,7 +541,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 10,
     gap: 21,
-    marginTop: "95%",
+    marginTop: "50%",
   },
 
   headline2: {

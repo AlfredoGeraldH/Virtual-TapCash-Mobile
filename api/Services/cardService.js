@@ -4,20 +4,22 @@ import { apiAuth } from "../http-auth";
 
 const cardDataService = {
   get(token, virtualTapcashId) {
-    console.log(virtualTapcashId);
     return apiAuth(token).get(
       `/api/v1/card/get-cards-data/${virtualTapcashId}`
     );
   },
   ScanCard(token, data) {
-    return apiAuth(token).post("api/v1/card/add-card", data);
+    return apiAuth(token).post("/api/v1/card/add-card", data);
   },
   ScanCard2(token, data) {
-    return apiAuth(token).post("api/v1/card/add-card2", data);
+    return apiAuth(token).post("/api/v1/card/add-card2", data);
   },
   removeCard(token, data) {
-    return apiAuth(token).patch("api/v1/card/remove-card", data);
-  }
+    return apiAuth(token).patch("/api/v1/card/remove-card", data);
+  },
+  changeCard(token, data) {
+    return apiAuth(token).patch("/api/v1/card/change-card", data);
+  },
 };
 
 export default cardDataService;

@@ -12,10 +12,10 @@ const TransactionDataService = {
     );
   },
   activateQR(token, cardId) {
-    return apiAuth(token).post(`/api/v1/transaction/activate/${cardId}`);
+    return apiAuth(token).post(`/api/v1/qr/activate/${cardId}`);
   },
   deactivateQR(token, cardId) {
-    return apiAuth(token).post(`/api/v1/transaction/deactivate/${cardId}`);
+    return apiAuth(token).post(`/api/v1/qr/deactivate/${cardId}`);
   },
 };
 

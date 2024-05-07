@@ -86,14 +86,14 @@ const TopUpScreen = ({ navigation }) => {
       try {
         const responseAccountData = await AccountDataService.get(token);
         // console.log(responseAccountData.data);
-        setAccount(responseAccountData.data);
+        setAccount(responseAccountData.data.data);
         // console.log(responseAccountData.data.virtualTapCashId);
         const responseCardData = await cardDataService.get(
           token,
-          responseAccountData.data.virtualTapCashId
+          responseAccountData.data.data.virtualTapCashId
         );
-        setCards(responseCardData.data);
-        // console.log(responseCardData.data);
+        setCards(responseCardData.data.data);
+        console.log("top up, responsecarddata:",responseCardData.data);
       } catch (error) {
         console.log(error);
       }

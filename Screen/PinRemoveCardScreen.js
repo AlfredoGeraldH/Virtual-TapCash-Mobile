@@ -13,6 +13,7 @@ import TopBar from "../Component/topbar";
 import { useTokenStore } from "../tokenStore";
 import cardDataService from "../api/Services/cardService";
 import AccountDataService from "../api/Services/accountService";
+
 const { width, height } = Dimensions.get("window");
 
 const dialPad = [1, 2, 3, 4, 5, 6, 7, 8, 9, "fg", 0, "del"];
@@ -23,20 +24,25 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
   const [pinCode, setPinCode] = useState([]);
   const [cards, setCards] = useState([]);
 
-  const { idCard } = route.params;
+  const { idUser, idCard } = route.params;
+
+  console.log(idUser);
+  console.log(idCard);
+  console.log(cards);
+
   const pin = pinCode.join("");
   const token = useTokenStore((state) => state.token);
 
   const transaction = () => {
     const data = {
+      userId: idUser,
       cardId: idCard,
       pin: pin,
     };
+    console.log("pin remove card:", data);
     const response = cardDataService
       .removeCard(token, data)
-      .then(function (response) {
-        //when returns successfuly
-      })
+      .then(function (response) {})
       .catch(function (error) {
         //when returns error
         console.log(error);
@@ -57,7 +63,7 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
           const responseAccountData = await AccountDataService.get(token);
           const responseCardData = await cardDataService.get(
             token,
-            responseAccountData.data.virtualTapCashId
+            responseAccountData.data.data.virtualTapCashId
           );
           setCards(responseCardData);
         } catch (error) {
@@ -69,10 +75,10 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
     }
   }, [pinCode]);
 
-  if (cards.status == 204) {
-    navigation.navigate("RegisterCard");
-  } else if (cards.status == 200) {
+  if (cards.status == 200) {
     navigation.navigate("Home");
+  } else if (cards.status == 204) {
+    navigation.navigate("RegisterCard");
   }
 
   const DialPad = ({ onPress }) => {

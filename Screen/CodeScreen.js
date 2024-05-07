@@ -20,9 +20,9 @@ const CodeScreen = ({ navigation }) => {
         const responseAccountData = await AccountDataService.get(token);
         const responseCardData = await cardDataService.get(
           token,
-          responseAccountData.data.virtualTapCashId
+          responseAccountData.data.data.virtualTapCashId
         );
-        setCards(responseCardData.data);
+        setCards(responseCardData.data.data);
         // console.log(responseCardData.data);
       } catch (error) {
         console.log(error);

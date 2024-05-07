@@ -52,7 +52,7 @@ const LoginScreen = ({ navigation }) => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -66,31 +66,23 @@ const LoginScreen = ({ navigation }) => {
     const response = AuthDataService.login(data)
       .then(function (response) {
         //when returns successfuly
-        updateToken("Bearer " + response.data);
-        const localToken = "Bearer " + response.data
-        
+        updateToken("Bearer " + response.data.data);
+        const localToken = "Bearer " + response.data.data;
+
         const fetchDataAccount = async () => {
           try {
-            const responseAccountData = await AccountDataService.get(localToken);
-            console.log("account data: ",responseAccountData.data);
-            // console.log(responseAccountData.data.virtualTapCashId);
+            const responseAccountData = await AccountDataService.get(
+              localToken
+            );
             const responseCardData = await cardDataService.get(
               localToken,
-              responseAccountData.data.virtualTapCashId
+              responseAccountData.data.data.virtualTapCashId
             );
-            console.log(responseCardData)
             if (responseCardData.status == 204) {
-              navigation.navigate("RegisterCard")
+              navigation.navigate("RegisterCard");
             } else if (responseCardData.status == 200) {
-              navigation.navigate("Home")
+              navigation.navigate("Home");
             }
-            // setCards(responseCardData.data);
-            // const responseTransactionData = await TransactionDataService.get(
-            //   token,
-            //   cards.filter((card) => card.isDefault === true)[0]?.cardId
-            // );
-            // console.log("card data: ", responseCardData.data);
-            // console.log("transaction data: ", responseTransactionData.data);
           } catch (error) {
             console.log(error);
           }
@@ -98,13 +90,13 @@ const LoginScreen = ({ navigation }) => {
         fetchDataAccount();
 
         setModalVisible(false);
-        setIsLoading(false)
+        setIsLoading(false);
         // navigation.navigate("Home");
       })
       .catch(function (error) {
         //when returns error
         console.log(error);
-        setIsLoading(false)
+        setIsLoading(false);
         Alert.alert("Error", "Username atau Password salah", [
           { text: "OK", onPress: () => console.log("OK Pressed") },
         ]);
@@ -211,12 +203,16 @@ const LoginScreen = ({ navigation }) => {
                 // console.log({username})
                 // console.log({pin})
                 // navigation.push("Home");
-                setIsLoading(true)
+                setIsLoading(true);
                 fetchToken();
               }}
             >
               <View style={{ width: "110%" }}>
-                {isLoading ? <LightButton buttontext={"Loading"}/> : <FilledButton buttontext={"Log In"} />}
+                {isLoading ? (
+                  <LightButton buttontext={"Loading"} />
+                ) : (
+                  <FilledButton buttontext={"Log In"} />
+                )}
               </View>
             </TouchableOpacity>
           </View>

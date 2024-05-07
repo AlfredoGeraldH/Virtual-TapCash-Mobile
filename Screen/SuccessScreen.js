@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, View, Text, Image, BackHandler } from "react-native";
 import LightButton from "../Component/LightButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useTokenStore } from "../tokenStore";
 import TransactionDataService from "../api/Services/transactionService";
+import { useFocusEffect } from "@react-navigation/native";
 
 const SuccessScreen = ({ navigation, route }) => {
   const { nominal, rekening, idCard, rfid, type } = route.params;
@@ -18,6 +19,20 @@ const SuccessScreen = ({ navigation, route }) => {
   let year = date.getFullYear();
 
   let currentDate = `${day}-${month}-${year}`;
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        navigation.navigate("Home");
+        return true;f
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
