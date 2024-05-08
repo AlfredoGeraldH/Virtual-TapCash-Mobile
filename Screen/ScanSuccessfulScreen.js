@@ -1,16 +1,27 @@
-import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import { StyleSheet, Text, View, Image, Alert, BackHandler } from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import cardDataService from "../api/Services/cardService";
 import { useTokenStore } from "../tokenStore";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ScanSuccessfulScreen = ({ navigation, route }) => {
   const onBackPress = () => {
     navigation.navigate("Home")
     return true; // Prevent default behavior
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => {
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      };
+    }, [])
+  );
 
   return (
     <View style={styles.container}>

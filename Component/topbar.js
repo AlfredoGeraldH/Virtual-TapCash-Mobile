@@ -15,7 +15,7 @@ const TopBar = ({ title }) => {
         </View>
       </TouchableOpacity>
       <Text style={{ fontSize: 16 }}>{title}</Text>
-      <View style={{marginRight:40}}></View>
+      <View style={{ marginRight: "15%" }}></View>
     </View>
   );
 };
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: "#F0F1F5",
-    paddingTop: "15%",
+    marginTop: "10%",
   },
 });
 

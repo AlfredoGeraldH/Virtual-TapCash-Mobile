@@ -36,7 +36,7 @@ const PinScreen = ({ navigation, route }) => {
       type: type,
       pin: pin,
     };
-    
+
     setIsLoading(true); // Set isLoading to true before making the API call
 
     try {
@@ -65,6 +65,7 @@ const PinScreen = ({ navigation, route }) => {
       }
     } finally {
       setIsLoading(false); // Set isLoading to false after the API call is completed
+      setPinCode([]);
     }
   };
 
