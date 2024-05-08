@@ -1,13 +1,11 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-
 const TopBar = ({ title }) => {
   const navigation = useNavigation();
-
   return (
     <View style={styles.topbar}>
-      {/* <TouchableOpacity
+      <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}
@@ -15,8 +13,9 @@ const TopBar = ({ title }) => {
         <View style={{ marginLeft: "10%" }}>
           <Image source={require("../assets/icon/ic_arrow_left.png")} />
         </View>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
       <Text style={{ fontSize: 16 }}>{title}</Text>
+      <View style={{marginRight:40}}></View>
     </View>
   );
 };
@@ -27,11 +26,11 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 16,
     backgroundColor: "#FCFCFC",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: "#F0F1F5",
-    marginTop: "10%"
+    paddingTop: "15%",
   },
 });
 

@@ -7,9 +7,26 @@ import cardDataService from "../api/Services/cardService";
 import { useTokenStore } from "../tokenStore";
 
 const ScanSuccessfulScreen = ({ navigation, route }) => {
+  const onBackPress = () => {
+    navigation.navigate("Home")
+    return true; // Prevent default behavior
+  };
+
   return (
     <View style={styles.container}>
-      <TopBar title="Virtual TapCash" />
+      <View style={styles.topbar}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Home')
+          }}
+        >
+          <View style={{ marginLeft: "10%" }}>
+            <Image source={require("../assets/icon/ic_arrow_left.png")} />
+          </View>
+        </TouchableOpacity>
+        <Text style={{ fontSize: 16 }}>Virtual TapCash</Text>
+        <View style={{ marginRight: 40 }}></View>
+      </View>
       <View style={{ alignItems: "center", width: "100%" }}>
         <Image source={require("../assets/scan_success.png")} />
         <Text style={{ fontSize: 16, fontWeight: "500" }}>
@@ -49,6 +66,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 100,
     justifyContent: 'space-between'
+  },
+  topbar: {
+    flexDirection: "row",
+    width: "100%",
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    backgroundColor: "#FCFCFC",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F1F5",
+    paddingTop: "15%",
   },
 });
 

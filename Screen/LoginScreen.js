@@ -81,8 +81,12 @@ const LoginScreen = ({ navigation }) => {
               responseAccountData.data.data.virtualTapCashId
             );
             if (responseCardData.status == 204) {
+              setModalVisible(false);
+              setIsLoading(false);
               navigation.navigate("RegisterCard");
             } else if (responseCardData.status == 200) {
+              setModalVisible(false);
+              setIsLoading(false);
               navigation.navigate("Home");
             }
           } catch (error) {
@@ -90,13 +94,12 @@ const LoginScreen = ({ navigation }) => {
           }
         };
         fetchDataAccount();
-
-        setModalVisible(false);
-        setIsLoading(false);
         // navigation.navigate("Home");
       })
       .catch(function (error) {
         //when returns error
+        setModalVisible(false);
+        setIsLoading(false);
         console.log(error);
         if (
           error.response &&

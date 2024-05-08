@@ -273,26 +273,6 @@ const HomeScreen = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      const onBackPress = () => {
-        // navigation.navigate("Login")
-        Alert.alert(
-          "Keluar",
-          "Kamu yakin ingin keluar?",
-          [
-            {
-              text: "Tidak",
-              onPress: () => {
-                // Do nothing
-              },
-              style: "Ya",
-            },
-            { text: "YES", onPress: () => navigation.navigate("Login") },
-          ],
-          { cancelable: false }
-        );
-        return true; // Prevent default behavior
-      };
-
       BackHandler.addEventListener("hardwareBackPress", onBackPress);
 
       return () => {
@@ -300,6 +280,26 @@ const HomeScreen = ({ navigation }) => {
       };
     }, [])
   );
+
+  const onBackPress = () => {
+    // navigation.navigate("Login")
+    Alert.alert(
+      "Keluar",
+      "Kamu yakin ingin keluar?",
+      [
+        {
+          text: "Tidak",
+          onPress: () => {
+            // Do nothing
+          },
+          style: "Ya",
+        },
+        { text: "YES", onPress: () => navigation.navigate("Login") },
+      ],
+      { cancelable: false }
+    );
+    return true; // Prevent default behavior
+  };
 
   return (
     <View style={styles.container}>
@@ -344,8 +344,8 @@ const HomeScreen = ({ navigation }) => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("RegisterOption");
                 setModalVisible(false);
+                navigation.navigate("RegisterOption");
               }}
             >
               <View
@@ -367,7 +367,21 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-      <TopBar title={"Virtual TapCash"} />
+      
+      <View style={styles.topbar}>
+        <TouchableOpacity
+          onPress={() => {
+            onBackPress();
+          }}
+        >
+          <View style={{ marginLeft: "10%" }}>
+            <Image source={require("../assets/icon/ic_arrow_left.png")} />
+          </View>
+        </TouchableOpacity>
+        <Text style={{ fontSize: 16 }}>Virtual TapCash</Text>
+        <View style={{ marginRight: 40 }}></View>
+      </View>
+
       <View>
         <ScrollView
           contentContainerStyle={{
@@ -444,8 +458,8 @@ const HomeScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 console.log("TopUp");
-                navigation.push("TopUp");
                 setModalVisible(false);
+                navigation.push("TopUp");
               }}
             >
               <View style={styles.lightbutton}>
@@ -455,8 +469,8 @@ const HomeScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 console.log("Withdraw");
-                navigation.push("Withdraw");
                 setModalVisible(false);
+                navigation.push("Withdraw");
               }}
             >
               <View style={styles.lightbutton}>
@@ -482,9 +496,9 @@ const HomeScreen = ({ navigation }) => {
               </Text>
               <TouchableOpacity
                 onPress={() => {
+                  setModalVisible(false);
                   navigation.push("Code");
                   handleOpenQRCode();
-                  setModalVisible(false);
                 }}
               >
                 <View style={styles.QRbutton}>
@@ -547,6 +561,19 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     backgroundColor: "rgba(52, 52, 52, 0.8)",
+  },
+
+  topbar: {
+    flexDirection: "row",
+    width: "100%",
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    backgroundColor: "#FCFCFC",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F1F5",
+    paddingTop: "15%",
   },
 
   lightbutton: {
