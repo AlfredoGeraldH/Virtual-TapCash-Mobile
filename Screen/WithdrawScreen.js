@@ -9,7 +9,8 @@ import cardDataService from "../api/Services/cardService";
 import LightButton from "../Component/LightButton";
 
 const WithdrawScreen = ({ navigation }) => {
-  const [number, onChangeNumber] = useState();
+  const [numberInput, setNumberInput] = useState('');
+  const [numberFormatted, setNumberFormatted] = useState('');
 
   const [account, setAccount] = useState([]);
   const [cards, setCards] = useState([]);
@@ -36,17 +37,33 @@ const WithdrawScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (
-      number >
-      cards.filter((card) => card.isDefault === true)[0]?.tapCashBalance || number == 0
+      numberInput >
+        cards.filter((card) => card.isDefault === true)[0]?.tapCashBalance ||
+      numberInput == null ||
+      numberInput == 0
     ) {
       setNominalWarningVisible(true);
     } else {
       setNominalWarningVisible(false);
     }
-  }, [number]);
+  }, [numberInput]);
 
-  if (nominalWarningVisible === true) {
-  }
+  // Fungsi untuk memformat angka dengan titik setiap tiga digit
+  const formatNumberWithSeparator = (value) => {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
+
+  // Handler perubahan input angka
+  const handleInputChange = (inputValue) => {
+    // Menghapus karakter non-digit dari nilai input
+    const formattedValue = inputValue.replace(/\D/g, '');
+    // Update state dengan angka yang belum diformat
+    setNumberInput(formattedValue);
+    // Memformat angka dengan titik setiap tiga digit
+    const formattedNumber = formatNumberWithSeparator(formattedValue);
+    // Update state dengan angka yang diformat
+    setNumberFormatted(formattedNumber);
+  };
 
   return (
     <View style={styles.container}>
@@ -124,18 +141,28 @@ const WithdrawScreen = ({ navigation }) => {
               borderBottomColor: "#000000",
               borderBottomWidth: 0.5,
             }}
-            // style={styles.input}
-            onChangeText={onChangeNumber}
-            value={number}
+            onChangeText={handleInputChange}
+            value={numberFormatted}
             placeholder="Nominal penarikan kembali saldo TapCash"
             keyboardType="numeric"
           />
         </View>
-        <Text style={{color:"red", fontWeight:"500", fontSize:12, marginLeft: 16, marginBottom:20}}> {nominalWarningVisible == true ? "Saldo Kurang" : ""} </Text>
+        <Text
+          style={{
+            color: "red",
+            fontWeight: "500",
+            fontSize: 12,
+            marginLeft: 16,
+            marginBottom: 20,
+          }}
+        >
+          {" "}
+          {nominalWarningVisible ? "Masukkan nominal dengan benar!" : ""}{" "}
+        </Text>
       </View>
       <View style={{ flex: 1 }} />
 
-      {nominalWarningVisible == true ? (
+      {nominalWarningVisible ? (
         <View>
           <View
             style={{
@@ -154,8 +181,8 @@ const WithdrawScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => {
             navigation.push("ConfirmPayment", {
-              price: number,
-              nominal: number,
+              price: parseInt(numberInput), // Mengonversi nilai input menjadi integer sebelum menyimpannya
+              nominal: parseInt(numberInput), // Mengonversi nilai input menjadi integer sebelum menyimpannya
               rekening: account.accountNumber,
               idCard: cards.filter((card) => card.isDefault === true)[0]
                 ?.cardId,

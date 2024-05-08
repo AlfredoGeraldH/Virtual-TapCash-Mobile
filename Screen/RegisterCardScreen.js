@@ -1,8 +1,14 @@
-import { StyleSheet, Text, View, Image, BackHandler } from "react-native";
-import TopBar from "../Component/topbar";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  BackHandler,
+  Alert,
+} from "react-native";
 import FilledButton from "../Component/FilledButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback } from "react";
 
 const App = ({ navigation }) => {
@@ -10,22 +16,50 @@ const App = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      const onBackPress = () => {
-        navigation.navigate("Login")
-        return true; // Prevent default behavior
-      };
-  
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-  
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
       return () => {
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
       };
     }, [])
   );
 
+  const onBackPress = () => {
+    // navigation.navigate("Login")
+    Alert.alert(
+      "Keluar",
+      "Kamu yakin ingin keluar?",
+      [
+        {
+          text: "Tidak",
+          onPress: () => {
+            // Do nothing
+          },
+          style: "Ya",
+        },
+        { text: "YES", onPress: () => navigation.navigate("Login") },
+      ],
+      { cancelable: false }
+    );
+    return true; // Prevent default behavior
+  };
+
   return (
     <View style={styles.container}>
-      <TopBar title="Virtual TapCash" />
+      <View style={styles.topbar}>
+        <TouchableOpacity
+          onPress={() => {
+            onBackPress();
+          }}
+        >
+          <View style={{ marginLeft: "10%" }}>
+            <Image source={require("../assets/icon/ic_arrow_left.png")} />
+          </View>
+        </TouchableOpacity>
+        <Text style={{ fontSize: 16 }}>Virtual TapCash</Text>
+        <View style={{ marginRight: 40 }}></View>
+      </View>
+
       <View style={{ alignItems: "center", width: "100%" }}>
         <Image source={require("../assets/card_image.png")} />
         <Text style={{ fontSize: 16, fontWeight: "500" }}>
@@ -66,6 +100,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: 150,
+  },
+  topbar: {
+    flexDirection: "row",
+    width: "100%",
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    backgroundColor: "#FCFCFC",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F1F5",
+    paddingTop: "15%",
   },
 });
 
