@@ -144,14 +144,14 @@ const LoginScreen = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
-        BackHandler.exitApp()
+        BackHandler.exitApp();
         return true; // Prevent default behavior
       };
-  
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-  
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
       return () => {
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
       };
     }, [])
   );
@@ -256,14 +256,17 @@ const LoginScreen = ({ navigation }) => {
         </Text>
       </View>
 
-      <View
+      <TouchableOpacity
         style={{
           flexDirection: "row",
           paddingHorizontal: "5%",
         }}
+        onPress={() => {
+          setModalVisible(true);
+        }}
       >
         <FilledButton buttontext={"Log In"} />
-      </View>
+      </TouchableOpacity>
 
       <View style={{ height: 100 }}>
         <FlatList
