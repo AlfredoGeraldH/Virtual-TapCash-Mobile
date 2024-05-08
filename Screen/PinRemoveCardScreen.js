@@ -23,12 +23,9 @@ const pinLength = 6;
 const PinRemoveCardScreen = ({ navigation, route }) => {
   const [pinCode, setPinCode] = useState([]);
   const [cards, setCards] = useState([]);
+  const [navigationDestination, setNavigationDestination] = useState(null);
 
   const { idUser, idCard } = route.params;
-
-  console.log(idUser);
-  console.log(idCard);
-  console.log(cards);
 
   const pin = pinCode.join("");
   const token = useTokenStore((state) => state.token);
@@ -88,11 +85,19 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
     }
   }, [pinCode]);
 
-  if (cards.status == 204) {
-    navigation.navigate("RegisterCard");
-  } else if (cards.status == 200) {
-    navigation.navigate("Home");
-  }
+  useEffect(() => {
+    if (cards.status === 204) {
+      setNavigationDestination("RegisterCard");
+    } else if (cards.status === 200) {
+      setNavigationDestination("Home");
+    }
+  }, [cards]);
+
+  useEffect(() => {
+    if (navigationDestination) {
+      navigation.navigate(navigationDestination);
+    }
+  }, [navigationDestination]);
 
   const DialPad = ({ onPress }) => {
     return (

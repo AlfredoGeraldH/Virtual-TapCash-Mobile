@@ -9,14 +9,16 @@ import {
   ImageBackground,
   TextInput,
   Alert,
+  BackHandler,
 } from "react-native";
 import FilledButton from "../Component/FilledButton";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import AuthDataService from "../api/Services/authService";
 import { useTokenStore } from "../tokenStore";
 import LightButton from "../Component/LightButton";
 import AccountDataService from "../api/Services/accountService";
 import cardDataService from "../api/Services/cardService";
+import { useFocusEffect } from "@react-navigation/native";
 
 const background = require("../assets/background.png");
 
@@ -138,6 +140,21 @@ const LoginScreen = ({ navigation }) => {
   const imagePath = require("../assets/icon/ic_face.png");
 
   const [username, onChangeUsername] = useState("");
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        BackHandler.exitApp()
+        return true; // Prevent default behavior
+      };
+  
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      };
+    }, [])
+  );
 
   return (
     <ImageBackground

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import TopBar from "../Component/topbar";
 import { useEffect, useState } from "react";
 import NfcManager, { NfcTech } from "react-native-nfc-manager";
@@ -12,6 +12,7 @@ const ScanCardScreen = ({ navigation, route }) => {
   const { virtualTapCashId } = route.params;
   console.log(virtualTapCashId);
   const [nfcData, setNfcData] = useState("");
+  const token = useTokenStore((state) => state.token);
 
   const readNdef = async () => {
     try {
@@ -19,10 +20,29 @@ const ScanCardScreen = ({ navigation, route }) => {
       const tag = await NfcManager.getTag();
       // console.warn("Tag found", tag);
       setNfcData(tag.id);
-      navigation.navigate("ScanSuccessful", {
-        cardId: tag.id,
-        virtualTapCashId: virtualTapCashId,
-      });
+      const addCard = async () => {
+        const data = {
+          cardId: tag.id,
+          virtualTapcashId: virtualTapCashId,
+        };
+        console.log(data)
+        try {
+          const responseCardData = await cardDataService.ScanCard(token, data);
+          console.log(responseCardData);
+          if (responseCardData.status === 201) {
+            navigation.navigate("ScanSuccessful");
+          }
+        } catch (error) {
+          console.log(error.response.status);
+          const errorMessage = error.response.data.message; // Get the error message from the response
+          Alert.alert("Error", errorMessage, [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
+          navigation.navigate("RegisterOption");
+          console.log(error);
+        }
+      };      
+      addCard();
     } catch (ex) {
       // console.warn("Oops!", ex);
     } finally {

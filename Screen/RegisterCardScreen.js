@@ -1,10 +1,27 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, BackHandler } from "react-native";
 import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 
 const App = ({ navigation }) => {
   const imagePath = require("../assets/icon/ic_plus.png");
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        navigation.navigate("Login")
+        return true; // Prevent default behavior
+      };
+  
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      };
+    }, [])
+  );
 
   return (
     <View style={styles.container}>

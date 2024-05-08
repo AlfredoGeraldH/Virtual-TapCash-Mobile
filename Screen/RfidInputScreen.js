@@ -1,15 +1,40 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from "react-native";
 import TopBar from "../Component/topbar";
 import { TextInput } from "react-native-gesture-handler";
 import FilledButton from "../Component/FilledButton";
 import LightButton from "../Component/LightButton";
 import { useTokenStore } from "../tokenStore";
 import { useState } from "react";
+import cardDataService from "../api/Services/cardService";
 
 const RfidInputScreen = ({ navigation, route }) => {
   const token = useTokenStore((state) => state.token);
   const { virtualTapCashId } = route.params;
   const [number, onChangeNumber] = useState();
+  const addCard = async () => {
+    console.log("addCard kepanggil")
+    const data = {
+      rfid: number,
+      virtualTapcashId: virtualTapCashId,
+    };
+    console.log(data)
+    try {
+      const responseCardData = await cardDataService.ScanCard2(token, data);
+      console.log(responseCardData);
+      if (error.response.status === 200) {
+        navigation.navigate("ScanSuccessful");
+      }
+    } catch (error) {
+      console.log(error.response.status);
+      const errorMessage = error.response.data.message; // Get the error message from the response
+      Alert.alert("Error", errorMessage, [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
+      navigation.navigate("RegisterOption");
+      console.log(error);
+    }
+  };
+  
   return (
     <View style={styles.container}>
       <TopBar title="Tambah TapCash" />
@@ -49,11 +74,9 @@ const RfidInputScreen = ({ navigation, route }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{ width: "50%" }}
-          onPress={() =>
-            navigation.navigate("RfidSuccess", {
-              rfid: number,
-              virtualTapCashId: virtualTapCashId,
-            })
+          onPress={() => {
+            addCard()
+          }
           }
         >
           <FilledButton buttontext={"Selanjutnya"} />

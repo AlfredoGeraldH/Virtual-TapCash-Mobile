@@ -8,6 +8,7 @@ import {
   FlatList,
   Modal,
   Alert,
+  BackHandler,
 } from "react-native";
 import TopBar from "../Component/topbar";
 import Tapcash from "../Component/TapCash";
@@ -266,6 +267,37 @@ const HomeScreen = ({ navigation }) => {
       console.log(error);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        // navigation.navigate("Login")
+        Alert.alert(
+          'Keluar',
+          'Kamu yakin ingin keluar?',
+          [
+            {
+              text: 'Tidak',
+              onPress: () => {
+                // Do nothing
+              },
+              style: 'Ya',
+            },
+            { text: 'YES', onPress: () => navigation.navigate("Login") },
+          ],
+          { cancelable: false }
+        );
+        return true; // Prevent default behavior
+      };
+  
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      };
+    }, [])
+  );
+  
 
   return (
     <View style={styles.container}>
