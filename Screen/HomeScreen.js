@@ -69,12 +69,11 @@ const renderItem = ({ item }) => {
 const HomeScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [cards, setCards] = useState([]);
+  const [account, setAccount] = useState({});
   const [transactions, setTransactions] = useState([]);
-  const [isDefaultCard, setIsDefaultCard] = useState();
 
   const globalToken = useTokenStore((state) => state.token);
   const token = globalToken;
-  console.log("home, token:" + globalToken);
 
   const renderItem2 = ({ item }) => {
     return (
@@ -184,7 +183,7 @@ const HomeScreen = ({ navigation }) => {
           responseAccountData.data.data.virtualTapCashId
         );
         setCards(responseCardData.data.data);
-        console.log("response card data:", responseCardData.data.data);
+        setAccount(responseAccountData.data.data);
       } catch (error) {
         console.log(error);
       }
@@ -199,17 +198,23 @@ const HomeScreen = ({ navigation }) => {
           token,
           cardId
         );
-        setTransactions(responseTransactionData.data.data);
-        console.log("transaction data: ", responseTransactionData.data.data);
+        const filteredCard = cards.filter(kartu => kartu.isDefault === true && kartu.user.virtualTapCashId === account.virtualTapCashId)[0];
+        const newTransactions = responseTransactionData.data.data.filter(transaction => transaction.user.virtualTapCashId === filteredCard.user.virtualTapCashId );
+        setTransactions(newTransactions);
+        console.log(newTransactions)
       } catch (error) {
         console.log(error);
       }
     };
-    fetchTransactionData(
-      cards.filter((card) => card.isDefault === true)[0]?.cardId
-    );
-  }, [cards]);
-
+  
+    if (cards.length > 0) {
+      const defaultCardId = cards.find((card) => card.isDefault === true)?.cardId;
+      if (defaultCardId) {
+        fetchTransactionData(defaultCardId);
+      }
+    }
+  }, [cards, account]);
+  
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -223,8 +228,6 @@ const HomeScreen = ({ navigation }) => {
           responseAccountData.data.data.virtualTapCashId
         );
         setCards(responseCardData.data.data);
-        //console.log("response card data:", responseCardData);
-        // console.log(cards);
       } catch (error) {
         console.log(error);
       }
@@ -236,8 +239,8 @@ const HomeScreen = ({ navigation }) => {
           token,
           cardId
         );
-        //console.log("transaction:", responseTransactionData);
-        setTransactions(responseTransactionData.data.data);
+        const newTransactions = responseTransactionData.data.data.filter(transactions => transactions.user.virtualTapCashId === cards.virtualTapCashId)
+        setTransactions(newTransactions);
       } catch (error) {
         console.log(error);
       }
@@ -273,31 +276,30 @@ const HomeScreen = ({ navigation }) => {
       const onBackPress = () => {
         // navigation.navigate("Login")
         Alert.alert(
-          'Keluar',
-          'Kamu yakin ingin keluar?',
+          "Keluar",
+          "Kamu yakin ingin keluar?",
           [
             {
-              text: 'Tidak',
+              text: "Tidak",
               onPress: () => {
                 // Do nothing
               },
-              style: 'Ya',
+              style: "Ya",
             },
-            { text: 'YES', onPress: () => navigation.navigate("Login") },
+            { text: "YES", onPress: () => navigation.navigate("Login") },
           ],
           { cancelable: false }
         );
         return true; // Prevent default behavior
       };
-  
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-  
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
       return () => {
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
       };
     }, [])
   );
-  
 
   return (
     <View style={styles.container}>
@@ -306,6 +308,9 @@ const HomeScreen = ({ navigation }) => {
         transparent={true}
         visible={modalVisible}
         style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
       >
         <View style={styles.container2}>
           <View style={styles.card2}>
@@ -410,21 +415,19 @@ const HomeScreen = ({ navigation }) => {
               </View>
             </View>
 
-            <TouchableOpacity>
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: "500",
-                  color: "#028CEF",
-                  textDecorationLine: "underline",
-                }}
-                onPress={() => {
-                  setModalVisible(true);
-                }}
-              >
-                Ganti Kartu
-              </Text>
-            </TouchableOpacity>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "500",
+                color: "#028CEF",
+                textDecorationLine: "underline",
+              }}
+              onPress={() => {
+                setModalVisible(true);
+              }}
+            >
+              Ganti Kartu
+            </Text>
           </View>
           <View style={{ marginLeft: "-7%" }}>
             <Tapcash

@@ -6,6 +6,7 @@ import {
   View,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
@@ -22,6 +23,7 @@ const pinLength = 6;
 
 const PinRemoveCardScreen = ({ navigation, route }) => {
   const [pinCode, setPinCode] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // Add isLoading state
   const [cards, setCards] = useState([]);
   const [navigationDestination, setNavigationDestination] = useState(null);
 
@@ -30,36 +32,41 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
   const pin = pinCode.join("");
   const token = useTokenStore((state) => state.token);
 
-  const transaction = () => {
+  const transaction = async () => {
     const data = {
       userId: idUser,
       cardId: idCard,
       pin: pin,
     };
-    console.log("pin remove card:", data);
-    const response = cardDataService
-      .removeCard(token, data)
-      .then(function (response) {
-        fetchDataAccount();
-      })
-      .catch(function (error) {
-        //when returns error
-        console.log(error);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
-          Alert.alert("Error", error.response.data.message, [
-            { text: "OK", onPress: () => console.log("OK Pressed") },
-          ]);
-        } else {
-          // If 'error.response.data.message' doesn't exist, show a generic error message
-          Alert.alert("Error", "An error occurred", [
-            { text: "OK", onPress: () => console.log("OK Pressed") },
-          ]);
-        }
-      });
+
+    setIsLoading(true); // Set isLoading to true before making the API call
+
+    try {
+      const response = await cardDataService.removeCard(token, data);
+      fetchDataAccount();
+      Alert.alert("Berhasil", "Kartu Berhasil Dihapus", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
+    } catch (error) {
+      //when returns error
+      console.log(error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        Alert.alert("Error", error.response.data.message, [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      } else {
+        // If 'error.response.data.message' doesn't exist, show a generic error message
+        Alert.alert("Error", "An error occurred", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      }
+    } finally {
+      setIsLoading(false); // Set isLoading to false after the API call is completed
+    }
   };
 
   const fetchDataAccount = async () => {
@@ -78,10 +85,6 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
   useEffect(() => {
     if (pinCode.length == 6) {
       transaction();
-      Alert.alert("Berhasil", "Kartu Berhasil Dihapus", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
-      console.log(cards);
     }
   }, [pinCode]);
 
@@ -155,7 +158,7 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <TopBar title="Konfirmasi Pembayaran" />
+      <TopBar title="Renove Card" />
       <Text
         style={{
           fontSize: 16,
@@ -206,6 +209,13 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
           }
         }}
       />
+
+      {/* Loading popup */}
+      {isLoading && (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
     </View>
   );
 };
@@ -216,6 +226,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     gap: 16,
+  },
+  loading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 999, // Ensure the loading popup is on top of other components
   },
 });
 

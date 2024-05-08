@@ -25,7 +25,6 @@ const RfidSuccessScreen = ({ navigation, route }) => {
     const addCard = async () => {
       try {
         const responseCardData = await cardDataService.ScanCard2(token, data);
-        console.log(responseCardData);
       } catch (error) {
         navigation.navigate("RegisterCard");
         Alert.alert("Error", "Kartu Sudah Terdaftar", [

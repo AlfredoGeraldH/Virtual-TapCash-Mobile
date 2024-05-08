@@ -10,7 +10,6 @@ const SuccessScreen = ({ navigation, route }) => {
   const { nominal, rekening, idCard, rfid, type } = route.params;
 
   const token = useTokenStore((state) => state.token);
-  console.log("success screeen, token:" + token);
 
   const date = new Date();
 

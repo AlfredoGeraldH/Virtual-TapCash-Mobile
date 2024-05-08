@@ -23,7 +23,7 @@ const CodeScreen = ({ navigation }) => {
           responseAccountData.data.data.virtualTapCashId
         );
         setCards(responseCardData.data.data);
-        // console.log(responseCardData.data);
+  
       } catch (error) {
         console.log(error);
       }

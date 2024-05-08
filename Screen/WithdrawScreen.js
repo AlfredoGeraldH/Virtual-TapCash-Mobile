@@ -6,12 +6,14 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useTokenStore } from "../tokenStore";
 import AccountDataService from "../api/Services/accountService";
 import cardDataService from "../api/Services/cardService";
+import LightButton from "../Component/LightButton";
 
 const WithdrawScreen = ({ navigation }) => {
   const [number, onChangeNumber] = useState();
 
   const [account, setAccount] = useState([]);
   const [cards, setCards] = useState([]);
+  const [nominalWarningVisible, setNominalWarningVisible] = useState(false);
 
   const token = useTokenStore((state) => state.token);
 
@@ -19,21 +21,32 @@ const WithdrawScreen = ({ navigation }) => {
     const fetchDataAccount = async () => {
       try {
         const responseAccountData = await AccountDataService.get(token);
-        // console.log(responseAccountData.data);
         setAccount(responseAccountData.data.data);
-        // console.log(responseAccountData.data.virtualTapCashId);
         const responseCardData = await cardDataService.get(
           token,
           responseAccountData.data.data.virtualTapCashId
         );
         setCards(responseCardData.data.data);
-        // console.log(responseCardData.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchDataAccount();
   }, []);
+
+  useEffect(() => {
+    if (
+      number >
+      cards.filter((card) => card.isDefault === true)[0]?.tapCashBalance || number == 0
+    ) {
+      setNominalWarningVisible(true);
+    } else {
+      setNominalWarningVisible(false);
+    }
+  }, [number]);
+
+  if (nominalWarningVisible === true) {
+  }
 
   return (
     <View style={styles.container}>
@@ -118,35 +131,54 @@ const WithdrawScreen = ({ navigation }) => {
             keyboardType="numeric"
           />
         </View>
+        <Text style={{color:"red", fontWeight:"500", fontSize:12, marginLeft: 16, marginBottom:20}}> {nominalWarningVisible == true ? "Saldo Kurang" : ""} </Text>
       </View>
       <View style={{ flex: 1 }} />
 
-      <TouchableOpacity
-        onPress={() => {
-          navigation.push("ConfirmPayment", {
-            price: number,
-            nominal: number,
-            rekening: account.accountNumber,
-            idCard: cards.filter((card) => card.isDefault === true)[0]?.cardId,
-            virtualTapCashId: account.virtualTapCashId,
-            rfid: cards.filter((card) => card.isDefault === true)[0]?.rfid,
-            type: "WITHDRAW",
-          });
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            width: "110%",
-            paddingVertical: 20,
-            paddingHorizontal: 16,
-            backgroundColor: "#FFF",
-            alignItems: "center",
+      {nominalWarningVisible == true ? (
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "110%",
+              paddingVertical: 20,
+              paddingHorizontal: 16,
+              backgroundColor: "#FFF",
+              alignItems: "center",
+            }}
+          >
+            <LightButton buttontext={"Selanjutnya"} />
+          </View>
+        </View>
+      ) : (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.push("ConfirmPayment", {
+              price: number,
+              nominal: number,
+              rekening: account.accountNumber,
+              idCard: cards.filter((card) => card.isDefault === true)[0]
+                ?.cardId,
+              virtualTapCashId: account.virtualTapCashId,
+              rfid: cards.filter((card) => card.isDefault === true)[0]?.rfid,
+              type: "WITHDRAW",
+            });
           }}
         >
-          <FilledButton buttontext={"Selanjutnya"} />
-        </View>
-      </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "110%",
+              paddingVertical: 20,
+              paddingHorizontal: 16,
+              backgroundColor: "#FFF",
+              alignItems: "center",
+            }}
+          >
+            <FilledButton buttontext={"Selanjutnya"} />
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

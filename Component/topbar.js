@@ -7,7 +7,7 @@ const TopBar = ({ title }) => {
 
   return (
     <View style={styles.topbar}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}
@@ -15,9 +15,8 @@ const TopBar = ({ title }) => {
         <View style={{ marginLeft: "10%" }}>
           <Image source={require("../assets/icon/ic_arrow_left.png")} />
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <Text style={{ fontSize: 16 }}>{title}</Text>
-      <View style={{marginRight:40}}></View>
     </View>
   );
 };
@@ -28,7 +27,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 16,
     backgroundColor: "#FCFCFC",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: "#F0F1F5",

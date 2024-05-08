@@ -6,6 +6,7 @@ import {
   View,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
@@ -20,13 +21,14 @@ const pinLength = 6;
 
 const PinScreen = ({ navigation, route }) => {
   const [pinCode, setPinCode] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // Add isLoading state
 
   const { nominal, rekening, idCard, type, rfid, virtualTapCashId } =
     route.params;
   const pin = pinCode.join("");
   const token = useTokenStore((state) => state.token);
 
-  const transaction = () => {
+  const transaction = async () => {
     const data = {
       cardId: idCard,
       virtual_tapcash_id: virtualTapCashId,
@@ -34,45 +36,40 @@ const PinScreen = ({ navigation, route }) => {
       type: type,
       pin: pin,
     };
-    // console.log(data);
-    const response = topUpAndWithdraw
-      .post(token, data)
-      .then(function (response) {
-        //when returns successfuly
-        navigation.navigate("Success", {
-          nominal: nominal,
-          rekening: rekening,
-          idCard: idCard,
-          rfid: rfid,
-          type: type,
-        });
-      })
-      .catch(function (error) {
-        //when returns error
-        console.log(error);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
-          Alert.alert("Error", error.response.data.message, [
-            { text: "OK", onPress: () => console.log("OK Pressed") },
-          ]);
-        } else {
-          // If 'error.response.data.message' doesn't exist, show a generic error message
-          Alert.alert("Error", "An error occurred", [
-            { text: "OK", onPress: () => console.log("OK Pressed") },
-          ]);
-        }
+    
+    setIsLoading(true); // Set isLoading to true before making the API call
+
+    try {
+      const response = await topUpAndWithdraw.post(token, data);
+      navigation.navigate("Success", {
+        nominal: nominal,
+        rekening: rekening,
+        idCard: idCard,
+        rfid: rfid,
+        type: type,
       });
-    if (response.status == 200) {
-    } else {
-      setPinCode([]);
+    } catch (error) {
+      console.log(error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        Alert.alert("Error", error.response.data.message, [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      } else {
+        Alert.alert("Error", "An error occurred", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      }
+    } finally {
+      setIsLoading(false); // Set isLoading to false after the API call is completed
     }
   };
 
   useEffect(() => {
-    if (pinCode.length == 6) {
+    if (pinCode.length === pinLength) {
       transaction();
     }
   }, [pinCode]);
@@ -184,6 +181,13 @@ const PinScreen = ({ navigation, route }) => {
           }
         }}
       />
+
+      {/* Loading popup */}
+      {isLoading && (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
     </View>
   );
 };
@@ -194,6 +198,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     gap: 16,
+  },
+  loading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 999, // Ensure the loading popup is on top of other components
   },
 });
 

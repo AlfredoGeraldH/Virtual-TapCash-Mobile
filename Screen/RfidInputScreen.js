@@ -12,20 +12,16 @@ const RfidInputScreen = ({ navigation, route }) => {
   const { virtualTapCashId } = route.params;
   const [number, onChangeNumber] = useState();
   const addCard = async () => {
-    console.log("addCard kepanggil")
     const data = {
       rfid: number,
       virtualTapcashId: virtualTapCashId,
     };
-    console.log(data)
     try {
-      const responseCardData = await cardDataService.ScanCard2(token, data);
-      console.log(responseCardData);
-      if (error.response.status === 200) {
+      const responseCardData = await cardDataService.ScanCard2(token, data)
+      if (responseCardData.status === 201) {
         navigation.navigate("ScanSuccessful");
       }
     } catch (error) {
-      console.log(error.response.status);
       const errorMessage = error.response.data.message; // Get the error message from the response
       Alert.alert("Error", errorMessage, [
         { text: "OK", onPress: () => console.log("OK Pressed") },

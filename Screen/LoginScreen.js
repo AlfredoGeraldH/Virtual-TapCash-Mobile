@@ -144,12 +144,13 @@ const LoginScreen = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
-        BackHandler.exitApp();
+        if (modalVisible == false) {
+          BackHandler.exitApp();
+        } 
         return true; // Prevent default behavior
       };
 
       BackHandler.addEventListener("hardwareBackPress", onBackPress);
-
       return () => {
         BackHandler.removeEventListener("hardwareBackPress", onBackPress);
       };
@@ -167,6 +168,9 @@ const LoginScreen = ({ navigation }) => {
         transparent={true}
         visible={modalVisible}
         style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
       >
         <View
           style={{
@@ -227,10 +231,6 @@ const LoginScreen = ({ navigation }) => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                console.log("Login inside modal");
-                // console.log({username})
-                // console.log({pin})
-                // navigation.push("Home");
                 setIsLoading(true);
                 fetchToken();
               }}
@@ -252,7 +252,7 @@ const LoginScreen = ({ navigation }) => {
           source={require("../assets/logo/logo_bni.png")}
         />
         <Text style={{ color: "#006599", fontWeight: "600" }}>
-          Melayani Negeri Kebanggan Bangsa
+          Melayani Negeri Kebanggaan Bangsa
         </Text>
       </View>
 

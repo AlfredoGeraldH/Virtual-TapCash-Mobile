@@ -10,7 +10,6 @@ NfcManager.start();
 
 const ScanCardScreen = ({ navigation, route }) => {
   const { virtualTapCashId } = route.params;
-  console.log(virtualTapCashId);
   const [nfcData, setNfcData] = useState("");
   const token = useTokenStore((state) => state.token);
 
@@ -25,15 +24,12 @@ const ScanCardScreen = ({ navigation, route }) => {
           cardId: tag.id,
           virtualTapcashId: virtualTapCashId,
         };
-        console.log(data)
         try {
           const responseCardData = await cardDataService.ScanCard(token, data);
-          console.log(responseCardData);
           if (responseCardData.status === 201) {
             navigation.navigate("ScanSuccessful");
           }
         } catch (error) {
-          console.log(error.response.status);
           const errorMessage = error.response.data.message; // Get the error message from the response
           Alert.alert("Error", errorMessage, [
             { text: "OK", onPress: () => console.log("OK Pressed") },
