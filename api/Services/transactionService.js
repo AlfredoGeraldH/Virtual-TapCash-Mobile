@@ -5,10 +5,10 @@ const TransactionDataService = {
   create(data) {
     return api.post("/api/user/create-user", data);
   },
-  get(token, cardId) {
-    console.log(cardId);
+  get(token, virtualTapCashId, cardId) {
+    console.log(virtualTapCashId)
     return apiAuth(token).get(
-      `/api/v1/transaction/get-transaction-data/${cardId}`
+      `/api/v1/transaction/get-transaction-data/account/${virtualTapCashId}/card/${cardId}`
     );
   },
   activateQR(token, cardId) {

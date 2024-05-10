@@ -3,6 +3,7 @@ import { api } from "../http-common";
 
 const AuthDataService = {
   login(data) {
+    console.log('login',data)
     return api.post("/api/v1/auth/login", data);
   },
   delete(data, token) {

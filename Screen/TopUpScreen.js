@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import TopBar from "../Component/topbar";
 import FilledButton from "../Component/FilledButton";
 import LightButton from "../Component/LightButton";
-import {
-  FlatList,
-  TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import { useTokenStore } from "../tokenStore";
 import AccountDataService from "../api/Services/accountService";
 import cardDataService from "../api/Services/cardService";
@@ -143,20 +133,53 @@ const TopUpScreen = ({ navigation }) => {
           </Text>
           <Text style={{ fontSize: 16, fontWeight: "500", color: "#005E68" }}>
             {new Intl.NumberFormat("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-            }).format(cards.filter((card) => card.isDefault === true)[0]?.tapCashBalance)}
+              style: "currency",
+              currency: "IDR",
+            }).format(
+              cards.filter((card) => card.isDefault === true)[0]?.tapCashBalance
+            )}
           </Text>
         </View>
       </View>
 
       <View style={styles.card}>
-        <View style={{ margin: 20, flexDirection: "column", rowGap: 8 }}>
+        <View
+          style={{
+            marginTop: 10,
+            marginHorizontal: 20,
+            flexDirection: "column",
+            rowGap: 8,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Text style={{ fontSize: 16, fontWeight: "500", color: "#005E68" }}>
             Rekening Debet
           </Text>
           <Text style={{ fontSize: 14, fontWeight: "300", color: "#4E4B4B" }}>
+            Saldo Saat ini:
+          </Text>
+        </View>
+        <View
+          style={{
+            marginBottom: 10,
+            marginHorizontal: 20,
+            flexDirection: "column",
+            rowGap: 8,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 14, fontWeight: "400", color: "#4E4B4B" }}>
             {account.accountNumber}
+          </Text>
+          <Text style={{ fontSize: 14, fontWeight: "500", color: "#005E68" }}>
+            {new Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: "IDR",
+            }).format(account.bankAccountBalance)}
           </Text>
         </View>
       </View>

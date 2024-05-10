@@ -158,7 +158,7 @@ const PinRemoveCardScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <TopBar title="Renove Card" />
+      <TopBar title="Hapus Kartu" />
       <Text
         style={{
           fontSize: 16,

@@ -192,27 +192,20 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    const fetchTransactionData = async (cardId) => {
+    const fetchTransactionData = async (virtualTapCashId, cardId) => {
       try {
         const responseTransactionData = await TransactionDataService.get(
           token,
-          cardId
+          virtualTapCashId,
+          cardId,
         );
-        const filteredCard = cards.filter(kartu => kartu.isDefault === true && kartu.user.virtualTapCashId === account.virtualTapCashId)[0];
-        const newTransactions = responseTransactionData.data.data.filter(transaction => transaction.user.virtualTapCashId === filteredCard.user.virtualTapCashId );
-        setTransactions(newTransactions);
-        console.log(newTransactions)
+        setTransactions(responseTransactionData.data.data);
       } catch (error) {
         console.log(error);
       }
     };
-  
-    if (cards.length > 0) {
-      const defaultCardId = cards.find((card) => card.isDefault === true)?.cardId;
-      if (defaultCardId) {
-        fetchTransactionData(defaultCardId);
-      }
-    }
+    fetchTransactionData(cards.filter((card) => card.isDefault === true)[0]?.user.virtualTapCashId , cards.filter((card) => card.isDefault === true)[0]?.cardId)
+
   }, [cards, account]);
   
   const [refreshing, setRefreshing] = React.useState(false);
@@ -232,22 +225,19 @@ const HomeScreen = ({ navigation }) => {
         console.log(error);
       }
     };
-    fetchDataAccount();
-    const fetchTransactionData = async (cardId) => {
+    const fetchTransactionData = async (virtualTapCashId, cardId) => {
       try {
         const responseTransactionData = await TransactionDataService.get(
           token,
-          cardId
+          virtualTapCashId,
+          cardId,
         );
-        const newTransactions = responseTransactionData.data.data.filter(transactions => transactions.user.virtualTapCashId === cards.virtualTapCashId)
-        setTransactions(newTransactions);
+        setTransactions(responseTransactionData.data.data);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchTransactionData(
-      cards.filter((card) => card.isDefault === true)[0]?.cardId
-    );
+    fetchTransactionData(cards.filter((card) => card.isDefault === true)[0]?.user.virtualTapCashId , cards.filter((card) => card.isDefault === true)[0]?.cardId)
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
