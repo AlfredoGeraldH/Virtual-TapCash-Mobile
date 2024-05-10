@@ -225,6 +225,7 @@ const HomeScreen = ({ navigation }) => {
         console.log(error);
       }
     };
+    fetchDataAccount();
     const fetchTransactionData = async (virtualTapCashId, cardId) => {
       try {
         const responseTransactionData = await TransactionDataService.get(
