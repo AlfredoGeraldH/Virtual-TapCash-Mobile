@@ -1,16 +1,26 @@
 {
   "expo": {
-    "name": "VirtualTapcash",
+    "name": "Virtual Tapcash",
     "slug": "VirtualTapcash",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-vt.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash-vt.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ],
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -22,7 +32,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.alfredogerald.VirtualTapcash"
+      "package": "com.bni.VirtualTapcash"
     },
     "web": {
       "favicon": "./assets/favicon.png"

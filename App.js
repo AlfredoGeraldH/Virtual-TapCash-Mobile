@@ -8,18 +8,18 @@ import CodeScreen from "./Screen/CodeScreen";
 import SplashScreen from "./Screen/SplashScreen";
 import LoginScreen from "./Screen/LoginScreen";
 import TopUp from "./Screen/TopUpScreen";
-
 import WithdrawScreen from "./Screen/WithdrawScreen";
 import SuccessScreen from "./Screen/SuccessScreen";
 import ScanCardScreen from "./Screen/ScanCardScreen";
 import ScanSuccessfulScreen from "./Screen/ScanSuccessfulScreen";
-
 import ConfirmPaymentScreen from "./Screen/ConfirmPaymentScreen";
 import PinScreen from "./Screen/PinScreen";
 import RfidInputScreen from "./Screen/RfidInputScreen";
 import RfidSuccessScreen from "./Screen/RfidSuccessScreen";
 import RegisterOptionScreen from "./Screen/RegisterOptionScreen";
 import PinRemoveCardScreen from "./Screen/PinRemoveCardScreen";
+import UpdateScan from "./Screen/UpdateScan";
+import UpdateSuccess from "./Screen/UpdateSuccess";
 
 const Stack = createStackNavigator();
 
@@ -107,6 +107,16 @@ const App = () => {
           name="RfidSuccess"
           component={RfidSuccessScreen}
         />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="UpdateScan"
+          component={UpdateScan}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="UpdateSuccess"
+          component={UpdateSuccess}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -116,7 +126,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    margin: 100,
   },
   image: {
     flex: 1,

@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^2.2.3",
     "axios": "^1.6.8",
     "expo": "~50.0.14",
+    "expo-build-properties": "^0.12.1",
     "expo-dev-client": "~3.3.11",
     "expo-status-bar": "~1.11.1",
     "moment": "^2.30.1",

@@ -197,17 +197,19 @@ const HomeScreen = ({ navigation }) => {
         const responseTransactionData = await TransactionDataService.get(
           token,
           virtualTapCashId,
-          cardId,
+          cardId
         );
         setTransactions(responseTransactionData.data.data);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchTransactionData(cards.filter((card) => card.isDefault === true)[0]?.user.virtualTapCashId , cards.filter((card) => card.isDefault === true)[0]?.cardId)
-
+    fetchTransactionData(
+      cards.filter((card) => card.isDefault === true)[0]?.user.virtualTapCashId,
+      cards.filter((card) => card.isDefault === true)[0]?.cardId
+    );
   }, [cards, account]);
-  
+
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -231,14 +233,17 @@ const HomeScreen = ({ navigation }) => {
         const responseTransactionData = await TransactionDataService.get(
           token,
           virtualTapCashId,
-          cardId,
+          cardId
         );
         setTransactions(responseTransactionData.data.data);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchTransactionData(cards.filter((card) => card.isDefault === true)[0]?.user.virtualTapCashId , cards.filter((card) => card.isDefault === true)[0]?.cardId)
+    fetchTransactionData(
+      cards.filter((card) => card.isDefault === true)[0]?.user.virtualTapCashId,
+      cards.filter((card) => card.isDefault === true)[0]?.cardId
+    );
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -358,7 +363,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-      
+
       <View style={styles.topbar}>
         <TouchableOpacity
           onPress={() => {
@@ -469,6 +474,18 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 12, color: "#005E68" }}>Withdraw</Text>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("Update");
+                setModalVisible(false);
+                navigation.push("UpdateScan");
+              }}
+            >
+              <View style={styles.lightbutton}>
+                <Image source={require("../assets/icon/ic_saldo.png")} />
+                <Text style={{ fontSize: 12, color: "#005E68" }}>Update Saldo</Text>
+              </View>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.pembayaran}>
@@ -546,6 +563,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     gap: 16,
+    backgroundColor: "#F5F9FA",
   },
 
   container2: {
@@ -577,6 +595,8 @@ const styles = StyleSheet.create({
     borderColor: "#005E68",
     flexDirection: "row",
     backgroundColor: "#FFF",
+    width: 110,
+    justifyContent: "center",
   },
 
   pembayaran: {
