@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const apiAuth = (token) => {
   const apiAuthGetWithToken = axios.create({
-    baseURL: "https://virtualtapcash-production.up.railway.app",
+    baseURL: "http://34.128.83.116:8080",
     headers: {
       Authorization: token,
     },

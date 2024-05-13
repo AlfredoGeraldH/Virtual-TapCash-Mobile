@@ -70,8 +70,7 @@ const RegisterOptionScreen = ({ navigation }) => {
               Input Manual
             </Text>
             <Text style={{ color: "#4E4B4B", fontWeight: 400, fontSize: 12 }}>
-              Tempelkan kartu TapCash Anda pada perangkat. Pastikan perangkat
-              memiliki konektifitas NFC.
+            Masukkan 16 digit angka yang terdapat pada kartu TapCash Anda.
             </Text>
           </View>
         </TouchableOpacity>

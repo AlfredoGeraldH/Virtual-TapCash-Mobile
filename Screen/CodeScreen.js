@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, View, Text, Image, BackHandler } from "react-native";
 import TopBar from "../Component/topbar";
 import LightButton from "../Component/LightButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -8,6 +8,7 @@ import { useTokenStore } from "../tokenStore";
 import AccountDataService from "../api/Services/accountService";
 import cardDataService from "../api/Services/cardService";
 import TransactionDataService from "../api/Services/transactionService";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CodeScreen = ({ navigation }) => {
   const [cards, setCards] = useState([]);
@@ -23,7 +24,6 @@ const CodeScreen = ({ navigation }) => {
           responseAccountData.data.data.virtualTapCashId
         );
         setCards(responseCardData.data.data);
-  
       } catch (error) {
         console.log(error);
       }
@@ -39,9 +39,24 @@ const CodeScreen = ({ navigation }) => {
       );
       // Do something with the response, if needed
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        handleCloseQRCode(); // Panggil handleCloseQRCode sebelum navigasi
+        navigation.navigate("Home"); // Navigasi ke layar sebelumnya
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => {
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      };
+    }, [cards])
+  );
 
   const [minutes, setMinutes] = useState(1);
   const [seconds, setSeconds] = useState(0);
@@ -70,7 +85,21 @@ const CodeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TopBar title="QR Virtual TapCash" />
+      <View style={styles.topbar}>
+        <TouchableOpacity
+          onPress={() => {
+            handleCloseQRCode();
+            navigation.navigate("Home");
+          }}
+        >
+          <View style={{ marginLeft: "10%" }}>
+            <Image source={require("../assets/icon/ic_arrow_left.png")} />
+          </View>
+        </TouchableOpacity>
+        <Text style={{ fontSize: 16 }}>QR Virtual TapCash</Text>
+        <View style={{ marginRight: 40 }}></View>
+      </View>
+
       <View
         style={{
           width: "100%",
@@ -146,6 +175,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     gap: 16,
+  },
+  topbar: {
+    flexDirection: "row",
+    width: "100%",
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    backgroundColor: "#FCFCFC",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F1F5",
+    marginTop: "10%",
   },
 });
 
