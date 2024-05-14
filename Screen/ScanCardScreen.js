@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     gap: 100,
+    backgroundColor: "#F5F9FA",
   },
 });
 

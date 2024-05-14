@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     gap: 16,
+    backgroundColor: "#F5F9FA",
   },
   topbar: {
     flexDirection: "row",

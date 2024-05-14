@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: 150,
+    backgroundColor: "#F5F9FA",
   },
   topbar: {
     flexDirection: "row",

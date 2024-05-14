@@ -148,7 +148,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     gap: 16,
-    marginTop: "30%",
+    paddingTop: "30%",
+    backgroundColor: "#F5F9FA",
   },
 
   card: {

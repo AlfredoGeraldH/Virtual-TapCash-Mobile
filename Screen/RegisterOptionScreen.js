@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     gap: 16,
+    backgroundColor: "#F5F9FA",
   },
   card: {
     backgroundColor: "#FFF",

@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { StatusBar } from 'expo-status-bar';
 
 import RegisterCardScreen from "./Screen/RegisterCardScreen";
 import HomeScreen from "./Screen/HomeScreen";
@@ -118,6 +119,7 @@ const App = () => {
           component={UpdateSuccess}
         />
       </Stack.Navigator>
+      <StatusBar style="dark" />
     </NavigationContainer>
   );
 };

@@ -291,6 +291,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: "-10%",
     gap: "5%",
+    backgroundColor: "#F5F9FA",
   },
 
   item: {
